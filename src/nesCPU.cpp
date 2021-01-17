@@ -33,10 +33,10 @@ nesCPU::~nesCPU() {
 
 //-------------------------------------------------------------------------------------------------
 // Connection to the bus
+
 uint8_t nesCPU::read(uint16_t addr) {
 	return bus -> read(addr, false);
 }
-
 void nesCPU::write(uint16_t addr, uint8_t data) {
 	bus -> write(addr, data);
 }
@@ -67,7 +67,7 @@ void nesCPU::reset() {
 	cycles = 8;
 }
 
-void nesCPU:: irq() {
+void nesCPU::irq() {
 	if (getFlag(i) == 0) {
 		// write pc to stack, requires 2 writes as it is 16 bit wide
 		write(0x0100 + st, (pc >> 8) & 0x00FF);
@@ -84,6 +84,99 @@ void nesCPU:: irq() {
 
 		// read PC from 0xFFFE
 		addrAbs = 0xFFFE;
-		uint16_t lo = read(addrAbs)
+		uint16_t lo = read(addrAbs + 0);
+		uint16_t hi = read(addrAbs + 1);
+		pc = (hi << 8) | lo;
+
+		//irq clocks
+		cycles = 7;
 	}
+}
+
+void nesCPU::nmi() {
+	write(0x0100 + st, (pc >> 8) & 0x00FF);
+	st--;
+	write(0x0100 + st, pc & 0x00FF);
+	st--;
+
+	setFlag(b, 0);
+	setFlag(u, 1);
+	setFlag(i, 1);
+	write(0x0100 + st, status);
+	st--;
+
+	addrAbs = 0xFFFA;
+	uint16_t lo = read(addrAbs + 0);
+	uint16_t hi = read(addrAbs + 1);
+	pc = (hi << 8) | lo;
+
+	cycles = 8;
+}
+
+void nesCPU::clock() {
+	if (cycles == 0) {
+		opcode = read(pc);					// get next instruction
+		pc++;								
+		cycles = opcodeLookup[opcode].cycles;
+		setFlag(u, true);
+		uint8_t operand1 = (this->*opcodeLookup[opcode].addrMode)();
+		uint8_t operand2 = (this->*opcodeLookup[opcode].operate)();
+	}
+	cycles--;
+}
+
+bool nesCPU::complete() {
+	if (cycles == 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+uint8_t nesCPU::getFlag(flags f) {
+	return ((status & f) ? 1 : 0);
+}
+
+void nesCPU::setFlag(flags f, bool b) {
+	if (b) {
+		status |= f;
+	}
+	else {
+		status &= -f;
+	}
+}
+
+uint8_t nesCPU::fetch() {
+	if (!(opcodeLookup[opcode].addrMode == &nesCPU::IMP))
+		fetched = read(addrAbs);
+	return fetched;
+}
+
+uint8_t nesCPU::IMP() {
+	fetched = a;
+	return 0;
+}
+
+uint8_t nesCPU::IMM() {
+	addrAbs = pc++;
+	return 0;
+}
+
+uint8_t nesCPU::ZP0() {
+	addrAbs = read(pc);
+	pc++;
+	addrAbs &= 0x00FF;
+}
+
+uint8_t nesCPU::ZPX() {
+	addrAbs = read(pc) + x;
+	pc++;
+	addrAbs &= 0x00FF;
+}
+
+uint8_t nesCPU::ZPY() {
+	addrAbs = read(pc) + y;
+	pc++;
+	addrAbs &= 0x00FF;
 }

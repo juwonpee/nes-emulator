@@ -40,6 +40,7 @@ class nesCPU {
         };
 
         // external functions of the CPU (non software triggered functions)
+
         // reset CPU into known state
         void reset();
         // interrupt request
@@ -77,7 +78,9 @@ class nesCPU {
         uint64_t clockCount = 0;            //total count of the clock cycles
 
         Bus *bus = nullptr;
+        // read 8 bits from the bus
         uint8_t read(uint16_t addr);    
+        // write 8 bits to the bus at specified address
         void write(uint16_t addr, uint8_t data);
 
         // fetch instruction, implemented by read()
@@ -94,11 +97,24 @@ class nesCPU {
 
 
         //addressing modes
+
+        // Addressing mode: Implied
+        // No extra data needed
         uint8_t IMP();
+        // Addressing mode: Immediate
+        // Instructions target the next byte after the opcode as the data
         uint8_t IMM();
+        // Addressing mode: Zero Page
+        // Instructions are only capable of addressing the 1st page (256 bytes)
+        // next byte after opcode as the target address (only requires the lower byte)
         uint8_t ZP0();
+        // Addressing mode: Zero Page + X
+        // Zero Page instructions with X added as an offset to the index
         uint8_t ZPX();
+        // Addressing mode: Zero Page + Y
+        // Zero Page instructions with Y added as an offset to the index
         uint8_t ZPY();
+        
         uint8_t REL();
         uint8_t ABS();
         uint8_t ABX();
