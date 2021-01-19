@@ -235,7 +235,7 @@ uint8_t nesCPU::IND() {
 	pc++;
 	uint16_t ptr = (hi << 8) | lo;
 	if (lo == 0xFF) { 						// hardware bug
-		addrAbs = addrAbs = (read(ptr & 0xFF00) << 8) | read(ptr);
+		addrAbs = (read(ptr & 0xFF00) << 8) | read(ptr);
 	}
 	else {									// normal case
 		addrAbs = (read(ptr + 1) << 8) | read(ptr);
@@ -244,6 +244,27 @@ uint8_t nesCPU::IND() {
 	return 0;	
 }
 
-uint8_t nesCPU::INX() {
-	
+uint8_t nesCPU::IZX() {
+	uint8_t ptr = read(pc);
+	pc++;
+	ptr += x;
+	uint8_t lo = read(0x00FF & (uint16_t) ptr);
+	uint8_t hi = read(0x00FF & (uint16_t)(ptr + 1)); // Todo: check if ptr overflow wraps around to 0
+	addrAbs = (hi << 8) | lo;
+	return 0;
+}
+
+uint8_t nesCPU::IZY() {
+	uint16_t ptr = (uint16_t) read(pc);
+	pc++;
+	uint8_t lo = read(0x00FF & (uint16_t) ptr);
+	uint8_t hi = read(0x00FF & (uint16_t)(ptr + 1));
+	addrAbs = (hi << 8) | lo;
+	addrAbs += y;
+	if ((addrAbs & 0xFF00) != (hi << 8)) {
+		return 1;							// page changed, need one extra clock cycle
+	}
+	else {
+		return 0;
+	}
 }

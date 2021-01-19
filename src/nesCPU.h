@@ -131,11 +131,18 @@ class nesCPU {
         // Pointer to 16 address.
         // Hardware bug: If low byte is 0xFF, High byte is not incremented
         uint8_t IND();
-        
+        // Addressing mode: Indexed indirect with X offset
+        // Supplied X register is an offset to page 0
+        // 16 bit address read from location X in page 0
         uint8_t IZX();
+        // Addressing mode: Indirect indexed with Y offset
+        // Supplied Y register is an offset the indirect address in page 0
         uint8_t IZY();
 
-        //instructions
+//---------------------------------------------------------------------------------------
+//instructions
+//---------------------------------------------------------------------------------------
+
         uint8_t ADC();                      /*
         ADC  Add Memory to Accumulator with Carry
         A + M + C -> A, C                N Z C I D V
