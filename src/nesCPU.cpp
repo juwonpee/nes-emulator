@@ -167,16 +167,83 @@ uint8_t nesCPU::ZP0() {
 	addrAbs = read(pc);
 	pc++;
 	addrAbs &= 0x00FF;
+	return 0;
 }
 
 uint8_t nesCPU::ZPX() {
 	addrAbs = read(pc) + x;
 	pc++;
 	addrAbs &= 0x00FF;
+	return 0;
 }
 
 uint8_t nesCPU::ZPY() {
 	addrAbs = read(pc) + y;
 	pc++;
 	addrAbs &= 0x00FF;
+	return 0;
+}
+
+uint8_t nesCPU::REL() {
+	addrRel = read(pc);
+	pc++;
+	if (addrRel & 0x80) {
+		addrRel |= 0xFF00;
+	}
+	return 0;
+}
+
+uint8_t nesCPU::ABS() {
+	uint8_t lo = read(pc);
+	pc++;
+	uint8_t hi = read(pc);
+	pc++;
+	addrAbs = (hi << 8) | lo;
+	return 0;
+}
+
+uint8_t nesCPU::ABX() {
+	uint8_t lo = read(pc);
+	pc++;
+	uint8_t hi = read(pc);
+	pc++;
+	addrAbs = (hi << 8) | lo;
+	addrAbs += x;
+	if (addrAbs & 0xFF00 != hi << 8) {
+		return 1; 							// page changed, need one extra clock cycle
+	}
+	return 0;
+}
+
+uint8_t nesCPU::ABY() {
+	uint8_t lo = read(pc);
+	pc++;
+	uint8_t hi = read(pc);
+	pc++;
+	addrAbs = (hi << 8) | lo;
+	addrAbs += y;
+	if (addrAbs & 0xFF00 != hi << 8) {
+		return 1; 							// page changed, need one extra clock cycle
+	}
+	return 0;
+}
+
+uint8_t nesCPU::IND() {
+	uint8_t lo = read(pc);
+	pc++;
+	uint8_t hi = read(pc);
+	pc++;
+	uint16_t ptr = (hi << 8) | lo;
+	if (lo == 0xFF) { 						// hardware bug
+		addrAbs = addrAbs = (read(ptr & 0xFF00) << 8) | read(ptr);
+	}
+	else {									// normal case
+		addrAbs = (read(ptr + 1) << 8) | read(ptr);
+	}
+
+	return 0;	
+}
+
+uint8_t nesCPU::INX() {
+	
 }

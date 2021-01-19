@@ -114,12 +114,24 @@ class nesCPU {
         // Addressing mode: Zero Page + Y
         // Zero Page instructions with Y added as an offset to the index
         uint8_t ZPY();
-        
+        // Addressing mode: Relative
+        // Next PC is the byte after the opcode + pc
+        // Operand is a signed 8 bit integer so can only jump +127, -128
         uint8_t REL();
+        // Addressing mode: Absolute
+        // Full 16 bit addressing mode
         uint8_t ABS();
+        // Addressing mode: Absolute with X offset
+        // Full 16 bit addressing mode with X offset  
         uint8_t ABX();
+        // Addressing mode: Absolute with y offset
+        // Full 16 bit addressing mode with y offset
         uint8_t ABY();
+        // Addressing mode: Indirect
+        // Pointer to 16 address.
+        // Hardware bug: If low byte is 0xFF, High byte is not incremented
         uint8_t IND();
+        
         uint8_t IZX();
         uint8_t IZY();
 
