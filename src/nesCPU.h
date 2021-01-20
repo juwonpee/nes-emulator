@@ -143,61 +143,61 @@ class nesCPU {
 //instructions
 //---------------------------------------------------------------------------------------
 
-        uint8_t ADC();                      /*
-        ADC  Add Memory to Accumulator with Carry
-        A + M + C -> A, C                N Z C I D V
-                                         + + + - - +
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        immidiate     ADC #oper     69    2     2
-        zeropage      ADC oper      65    2     3
-        zeropage,X    ADC oper,X    75    2     4
-        absolute      ADC oper      6D    3     4
-        absolute,X    ADC oper,X    7D    3     4*
-        absolute,Y    ADC oper,Y    79    3     4*
-        (indirect,X)  ADC (oper,X)  61    2     6
-        (indirect),Y  ADC (oper),Y  71    2     5*
-        */
-        uint8_t AND();	                    /*
-        AND  AND Memory with Accumulator
-        A AND M -> A                     N Z C I D V
-                                         + + - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        immidiate     AND #oper     29    2     2
-        zeropage      AND oper      25    2     3
-        zeropage,X    AND oper,X    35    2     4
-        absolute      AND oper      2D    3     4
-        absolute,X    AND oper,X    3D    3     4*
-        absolute,Y    AND oper,Y    39    3     4*
-        (indirect,X)  AND (oper,X)  21    2     6
-        (indirect),Y  AND (oper),Y  31    2     5*
-        */
-        uint8_t ASL();	                    /*
-        ASL  Shift Left One Bit (Memory or Accumulator)
-        C <- [76543210] <- 0             N Z C I D V
-                                         + + + - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        accumulator   ASL A         0A    1     2
-        zeropage      ASL oper      06    2     5
-        zeropage,X    ASL oper,X    16    2     6
-        absolute      ASL oper      0E    3     6
-        absolute,X    ASL oper,X    1E    3     7
-        */
-        uint8_t BCC();                      /*
-        BCC  Branch on Carry Clear
-        branch on C = 0                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        */
+        // ADC  Add Memory to Accumulator with Carry
+        // A + M + C -> A, C                N Z C I D V
+        //                                  + + + - - +
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // immidiate     ADC #oper     69    2     2
+        // zeropage      ADC oper      65    2     3
+        // zeropage,X    ADC oper,X    75    2     4
+        // absolute      ADC oper      6D    3     4
+        // absolute,X    ADC oper,X    7D    3     4*
+        // absolute,Y    ADC oper,Y    79    3     4*
+        // (indirect,X)  ADC (oper,X)  61    2     6
+        // (indirect),Y  ADC (oper),Y  71    2     5*
+        uint8_t ADC();           
+
+        // AND  AND Memory with Accumulator
+        // A AND M -> A                     N Z C I D V
+        //                                  + + - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // immidiate     AND #oper     29    2     2
+        // zeropage      AND oper      25    2     3
+        // zeropage,X    AND oper,X    35    2     4
+        // absolute      AND oper      2D    3     4
+        // absolute,X    AND oper,X    3D    3     4*
+        // absolute,Y    AND oper,Y    39    3     4*
+        // (indirect,X)  AND (oper,X)  21    2     6
+        // (indirect),Y  AND (oper),Y  31    2     5*
+        uint8_t AND();
+
+        // ASL  Shift Left One Bit (Memory or Accumulator)
+        // C <- [76543210] <- 0             N Z C I D V
+        //                                  + + + - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // accumulator   ASL A         0A    1     2
+        // zeropage      ASL oper      06    2     5
+        // zeropage,X    ASL oper,X    16    2     6
+        // absolute      ASL oper      0E    3     6
+        // absolute,X    ASL oper,X    1E    3     7
+        uint8_t ASL();
+        // BCC  Branch on Carry Clear
+        // branch on C = 0                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BCC oper      90    2     2**
+        uint8_t BCC();
         uint8_t BCS();	                    /*
         BCS  Branch on Carry Set
         branch on C = 1                  N Z C I D V
                                          - - - - - -
         addressing    assembler    opc  bytes  cyles
         --------------------------------------------
+        relative      BCS oper      B0    2     2**
         */
         uint8_t BEQ();	                    /*
         BEQ  Branch on Result Zero
@@ -205,6 +205,7 @@ class nesCPU {
                                          - - - - - -
         addressing    assembler    opc  bytes  cyles
         --------------------------------------------
+        relative      BEQ oper      F0    2     2**
         */
         uint8_t BIT();	                    /*
         BIT  Test Bits in Memory with Accumulator

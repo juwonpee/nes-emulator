@@ -153,6 +153,11 @@ uint8_t nesCPU::fetch() {
 	return fetched;
 }
 
+
+//-------------------------------------------------------------------------------------------------
+// Addressing modes
+//-------------------------------------------------------------------------------------------------
+
 uint8_t nesCPU::IMP() {
 	fetched = a;
 	return 0;
@@ -267,4 +272,43 @@ uint8_t nesCPU::IZY() {
 	else {
 		return 0;
 	}
+}
+
+uint8_t nesCPU::ADC() {
+	fetch();
+	temp = a + fetched + (uint16_t) getFlag(c);	// add with carry flag
+	setFlag(c, temp > 255);
+	setFlag(z, (temp & 0x00FF) == 0);
+	setFlag(v, (~((uint16_t)a ^ (uint16_t)fetched) & ((uint16_t)a ^ (uint16_t)temp)) & 0x0080); // what???
+	setFlag(n, temp & 0x0080);
+	a = (uint8_t)(temp & 0x00FF);
+	return 1;								// can require extra clock cycle
+}
+
+uint8_t nesCPU::AND() {
+	fetch();
+	a = a & fetched;
+	setFlag(z, a == 0);
+	setFlag(n, a & 0x80);
+	return 1;
+}
+
+uint8_t nesCPU::ASL() {
+	fetch();
+	temp = (uint16_t) (fetched << 1);
+	setFlag(c, temp > 255);
+	setFlag(z, (temp & 0x00FF) == 0);
+	setFlag(n, temp & 0x0080);
+	if (opcodeLookup[opcode].addrMode != nesCPU::IMM) {
+		write(addrAbs, (uint8_t) temp);
+	}
+	else {
+		a = (uint8_t) temp;
+	}
+	return 0;
+}
+
+uint8_t nesCPU::BCC() {
+	fetch();
+	return 1;
 }
