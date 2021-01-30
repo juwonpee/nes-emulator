@@ -309,6 +309,51 @@ uint8_t nesCPU::ASL() {
 }
 
 uint8_t nesCPU::BCC() {
-	fetch();
+	if (getFlag(c) == 0) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
 	return 1;
 }
+
+uint8_t nesCPU::BCS() {
+	if (getFlag(c) == 1) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}
+uint8_t nesCPU::BEQ() {
+	if (getFlag(z) == 1) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles ++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}
+
+uint8_t nesCPU::BIT() {
+	fetch();
+	temp = a & fetched;
+	if ((temp & 0x00FF) == 0) {
+		setFlag(z, 1);
+	}
+	else {
+		setFlag(z, 1);
+	}
+	setFlag(n, fetched & (1 << 7));
+	setFlag(v, fetched & (1 << 6));
+	return 0;
+}
+

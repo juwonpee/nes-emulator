@@ -191,33 +191,36 @@ class nesCPU {
         // --------------------------------------------
         // relative      BCC oper      90    2     2**
         uint8_t BCC();
-        uint8_t BCS();	                    /*
-        BCS  Branch on Carry Set
-        branch on C = 1                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        relative      BCS oper      B0    2     2**
-        */
-        uint8_t BEQ();	                    /*
-        BEQ  Branch on Result Zero
-        branch on Z = 1                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        relative      BEQ oper      F0    2     2**
-        */
-        uint8_t BIT();	                    /*
-        BIT  Test Bits in Memory with Accumulator
-        bits 7 and 6 of operand are transfered to bit 7 and 6 of SR (N,V);
-        the zeroflag is set to the result of operand AND accumulator.
-        A AND M, M7 -> N, M6 -> V        N Z C I D V
-                                        M7 + - - - M6
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        zeropage      BIT oper      24    2     3
-        absolute      BIT oper      2C    3     4
-        */
+        
+        // BCS  Branch on Carry Set
+        // branch on C = 1                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BCS oper      B0    2     2**
+        uint8_t BCS();	         
+
+        // BEQ  Branch on Result Zero
+        // branch on Z = 1                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BEQ oper      F0    2     2**
+        uint8_t BEQ();	
+
+        // BIT  Test Bits in Memory with Accumulator
+        // bits 7 and 6 of operand are transfered to bit 7 and 6 of SR (N,V);
+        // the zeroflag is set to the result of operand AND accumulator.
+        // A AND M, M7 -> N, M6 -> V        N Z C I D V
+        //                                 M7 + - - - M6
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // zeropage      BIT oper      24    2     3
+        // absolute      BIT oper      2C    3     4
+        uint8_t BIT();
+
+
+        
         uint8_t BMI();                      /*
         BMI  Branch on Result Minus
         branch on N = 1                  N Z C I D V
