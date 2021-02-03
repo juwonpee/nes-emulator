@@ -1,0 +1,35 @@
+wxscintilla_ScintillaBase.o: \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ScintillaBase.cxx \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Platform.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/ILexer.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Sci_Position.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Scintilla.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/SciLexer.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/lexlib/PropSetSimple.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/lexlib/LexerModule.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Catalogue.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Position.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/SplitVector.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Partitioning.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/RunStyles.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ContractionState.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CellBuffer.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CallTip.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/KeyMap.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Indicator.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/XPM.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/LineMarker.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Style.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ViewStyle.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CharClassify.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Decoration.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CaseFolder.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Document.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Selection.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/PositionCache.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/EditModel.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/MarginView.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/EditView.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Editor.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/AutoComplete.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ScintillaBase.h

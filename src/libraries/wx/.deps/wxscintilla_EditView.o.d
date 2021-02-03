@@ -1,0 +1,31 @@
+wxscintilla_EditView.o: \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/EditView.cxx \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Platform.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/ILexer.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Sci_Position.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/include/Scintilla.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/lexlib/StringCopy.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/lexlib/CharacterSet.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Position.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/SplitVector.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Partitioning.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/RunStyles.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ContractionState.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CellBuffer.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/PerLine.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/KeyMap.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Indicator.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/XPM.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/LineMarker.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Style.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/ViewStyle.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CharClassify.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Decoration.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/CaseFolder.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Document.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/UniConversion.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/Selection.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/PositionCache.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/EditModel.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/MarginView.h \
+ /root/downloads/wx/wxWidgets/src/stc/scintilla/src/EditView.h

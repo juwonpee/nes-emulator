@@ -219,40 +219,36 @@ class nesCPU {
         // absolute      BIT oper      2C    3     4
         uint8_t BIT();
 
+        // BMI  Branch on Result Minus
+        // branch on N = 1                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BMI oper      30    2     2**        
+        uint8_t BMI();      
 
-        
-        uint8_t BMI();                      /*
-        BMI  Branch on Result Minus
-        branch on N = 1                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        relative      BMI oper      30    2     2**
-        */
-        uint8_t BNE();	                    /*
-        BNE  Branch on Result not Zero
-        branch on Z = 0                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        relative      BNE oper      D0    2     2**
-        */
-        uint8_t BPL();	                    /*
-        BPL  Branch on Result Plus
-        branch on N = 0                  N Z C I D V
-                                         - - - - - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        relative      BPL oper      10    2     2**
-        */
-        uint8_t BRK();	                    /*
-        BRK  Force Break
-        interrupt,                       N Z C I D V
-        push PC+2, push SR               - - - 1 - -
-        addressing    assembler    opc  bytes  cyles
-        --------------------------------------------
-        implied       BRK           00    1     7
-        */
+        // BNE  Branch on Result not Zero
+        // branch on Z = 0                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BNE oper      D0    2     2**
+        uint8_t BNE();	   
+
+        // BPL  Branch on Result Plus
+        // branch on N = 0                  N Z C I D V
+        //                                  - - - - - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // relative      BPL oper      10    2     2**
+        uint8_t BPL();	     
+        // BRK  Force Break
+        // interrupt,                       N Z C I D V
+        // push PC+2, push SR               - - - 1 - -
+        // addressing    assembler    opc  bytes  cyles
+        // --------------------------------------------
+        // implied       BRK           00    1     7
+        uint8_t BRK();	          
         uint8_t BVC();                      /*
         BVC  Branch on Overflow Clear
         branch on V = 0                  N Z C I D V

@@ -357,3 +357,50 @@ uint8_t nesCPU::BIT() {
 	return 0;
 }
 
+uint8_t nesCPU::BMI() {
+	if (getFlag(n) == 1) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}
+
+uint8_t nesCPU::BNE() {
+	if (getFlag(z) == 0) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}
+
+uint8_t nesCPU::BPL() {
+	if (getFlag(n) == 0) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}
+
+uint8_t nesCPU::BRK() {
+	if (getFlag(n) == 0) {
+		cycles++;
+		addrAbs = pc + addrRel;
+		if ((addrAbs & 0xFF00) != (pc & 0xFF00)) {
+			cycles++;
+		}
+		pc = addrAbs;
+	}
+	return 1;
+}

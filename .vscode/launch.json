@@ -1,0 +1,29 @@
+{
+    
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "linux": {
+                "program": "${workspaceRoot}/build/myapp",
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
+            }, 
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "program": "${workspaceFolder}/build/myapp",
+            "environment": [],
+            "externalConsole": false,
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Compile & Link"
+        }
+    ]
+}
