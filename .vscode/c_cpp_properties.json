@@ -1,20 +1,16 @@
 {
     "configurations": [
         {
-            "name": "Linux",            
+            "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "${workspaceFolder}/src/libraries/wx/include/gtk3-unicode-static-3.1"
-            ],            
-            "defines": [
-                "WX_PRECOMP",
-                "__WXGTK__",
-                "_FILE_OFFSET_BITS=64"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}",
+                "/usr/local/include/**"
             ],
-            "compilerPath": "/usr/bin/g++",
-            "cStandard": "c11",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "gcc-x64"
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cppStandard": "gnu++20"
         }
     ],
     "version": 4

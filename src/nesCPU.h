@@ -1,33 +1,25 @@
-#pragma once
-
 #include <vector>
 #include <string>
 #include <map>
+#include <wx/wx.h>
 
-class Bus;
 
 class nesCPU {
     public:
         nesCPU();
         ~nesCPU();
 
+        void execute();
+
+    private:
         //registers
-        uint8_t a = 0x00;
+        uint8_t a = 0x00;                   // Accumulator
         uint8_t x = 0x00;
         uint8_t y = 0x00;
         uint8_t st = 0x00;                  // stack pointer
-        uint16_t pc = 0x00;                 // program counter
-        uint8_t status = 0x00;              // status flags
+        uint16_t pc = 0x0000;               // program counter
 
-        // flags for CPU state
-        // c carry flag
-        // z zero flag
-        // i interrupt flag
-        // d decimal mode
-        // b breakpoints, used in debugging
-        // u software defined flag / undefined
-        // v overflow flag
-        // n negative flag
+        uint8_t status = 0x00;              // flags
         enum flags {
             c = (1 << 0),                   // carry flag
             z = (1 << 1),                   // zero flag
@@ -39,7 +31,6 @@ class nesCPU {
             n = (1 << 7),                   // negative flag
         };
 
-        // external functions of the CPU (non software triggered functions)
 
         // reset CPU into known state
         void reset();
@@ -52,49 +43,6 @@ class nesCPU {
 
         // returns if instruction has completed
         bool complete();
-
-        // initialization process of CPU
-        // connect CPU to bus
-        void connectBus (Bus *ptr) {
-            bus = ptr;
-        }
-
-
-
-
-
-    private:
-        //convenience functions
-        uint8_t getFlag(flags f);
-        void setFlag(flags f, bool b);
-
-        //assistive variables, not essential for emulation
-        uint8_t fetched = 0x00;               //fetched address from memory
-        uint16_t temp = 0x0000;             //used everywhere for convencience
-        uint16_t addrAbs = 0x0000;          //absolute memory addresses
-        uint16_t addrRel = 0x0000;          //relative memory addresses
-        uint8_t opcode = 0x00;              //opcode of instruction
-        uint8_t cycles = 0x00;              //number of cycles remaining for the instruction
-        uint64_t clockCount = 0;            //total count of the clock cycles
-
-        Bus *bus = nullptr;
-        // read 8 bits from the bus
-        uint8_t read(uint16_t addr);    
-        // write 8 bits to the bus at specified address
-        void write(uint16_t addr, uint8_t data);
-
-        // fetch instruction, implemented by read()
-        uint8_t fetch();
-
-        struct instruction {
-            std::string name;
-            uint8_t (nesCPU::*operate) (void) = nullptr;   // address of instruction function
-            uint8_t (nesCPU::*addrMode) (void) = nullptr;  // address of addressing mode
-            uint8_t cycles = 0;
-        };
-
-        std::vector<instruction> opcodeLookup;
-
 
         //addressing modes
 
@@ -707,5 +655,4 @@ class nesCPU {
         //                     0 .... cleared
         //                     M6 .... memory bit 6
         //                     M7 .... memory bit 7
-
 };
