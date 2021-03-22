@@ -1,7 +1,6 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <wx/wx.h>
 
 
 class nesCPU {

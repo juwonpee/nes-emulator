@@ -1,7 +1,12 @@
-#include "nesCPU.h"
+//#include "nesCPU.h"
 #include <thread>
-#include "gui.h"
+#include <wx/wx.h>
+#include <wx/string.h>
 
-int main() {
-    
+
+
+
+int main(int argc, char **argv)
+{
+  wxPuts(wxT("A wxWidgets console application"));
 }
