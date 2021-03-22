@@ -4,7 +4,7 @@
 #include <wx/string.h>
 
 
-
+__asm__(".symver realpath,realpath@GLIBC_2.2.5");
 
 int main(int argc, char **argv)
 {
