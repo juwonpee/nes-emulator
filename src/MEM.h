@@ -1,4 +1,4 @@
-#include <types.h>
+#include "types.h"
 
 // --------------------------------------- $10000
 //  Upper Bank of Cartridge ROM
@@ -14,12 +14,12 @@
 //  2kB Internal RAM, mirrored 4 times
 // --------------------------------------- $0000
 
-class CPUmem {
+class MEM {
     public:
-        CPUmem();
-        ~CPUmem();
-        uint8_t get(uint16_t address);
-        void set(uint16_t address, uint8_t data);
+        MEM();
+        ~MEM();
+        uint8_t read(uint16_t address);
+        void write(uint16_t address, uint8_t data);
     private:
         // Work ram 4 banks
         uint8_t wRAM0[2048];
@@ -30,8 +30,9 @@ class CPUmem {
         void* IOModule;
         uint8_t IO[12288];
         // Expansion modules
-        uint8_t EM[4098];
+        uint8_t Expansion[4098];
         // Cartridge RAM
+        // TODO
         void* cModule;
         uint8_t cRAM[2048];
         // Cartridge ROM
