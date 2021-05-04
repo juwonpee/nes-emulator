@@ -174,14 +174,68 @@ class CPU {
         // relative	    BEQ oper	    F0	    2	    2**
         void BEQ();
 
-        
+        // Test Bits in Memory with Accumulator
+        // bits 7 and 6 of operand are transfered to bit 7 and 6 of SR (N,V);
+        // the zero-flag is set to the result of operand AND accumulator.
+        // A AND M, M7 -> N, M6 -> V
+        // N  Z  C  I  D  V
+        // M7 +	 -	-  -  M6
+        // addressing	assembler	    opc     bytes	cyles
+        // zeropage	    BIT oper	    24	    2	    3  
+        // absolute	    BIT oper    	2C	    3	    4 
         void BIT();
+
+        
+        // Branch on Result Minus
+        // branch on N = 1
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // relative	    BMI oper	    30	    2	    2**
         void BMI();
+
+        // Branch on Result not Zero
+        // branch on Z = 0
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // relative	    BNE oper	    D0	    2	    2**
         void BNE();
+
+        // Branch on Result Plus
+        // branch on N = 0
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // relative	    BPL oper	    10	    2	    2**
         void BPL();
+        
+        // Force Break
+        // interrupt,
+        // push PC+2, push SR
+        // N Z C I D V
+        // - - - 1 - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // implied	    BRK 00	        1	    1	    7  
         void BRK();
+
+        // Branch on Overflow Clear
+        // branch on V = 0
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // relative	    BVC oper	    50	    2	    2**
         void BVC();
+
+        // Branch on Overflow Set
+        // branch on V = 1
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	    opc	    bytes	cyles
+        // relative	    BVC oper	    70	    2	    2**
         void BVS();
+
+        
         void CLC();
         void CLD();
         void CLI();

@@ -231,36 +231,67 @@ void CPU::ASL() {
 }
 
 void CPU::BCC() {
-    if (SR.C == 0) PC = finalAddress;
-    instructionClocks += 2;
+    if (instructionClocks == 0) {
+        if (!SR.C) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
 }
 
 void CPU::BCS() {
-    if (SR.C == 1) PC = finalAddress;
-    instructionClocks += 2;
+    if (instructionClocks == 0) {
+        if (SR.C) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
 }
 
 void CPU::BEQ() {
-    
+    if (instructionClocks == 0) {
+        if (SR.Z) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
 }
 
+void CPU::BIT() {
+    if (instructionClocks == 0) {
+        switch (addressMode) {
+            case zpg:
+                instructionClocks = 3;
+            case abs:
+                instructionClocks = 4;
+        };
 
+        SR.N = finalData & 0x40;
+        SR.V = finalData & 0x20;
+        SR.Z = finalData & A;
+    }
+    instructionClocks--;
+}
 
+void CPU::BMI() {
+    if (instructionClocks == 0) {
+        if (SR.N) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
+}
 
+void CPU::BNE() {
+    if (instructionClocks == 0) {
+        if (!SR.Z) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
+}
 
+void CPU::BPL() {
+    if (instructionClocks == 0) {
+        if (!SR.N) PC = finalAddress;
+        instructionClocks += 2;
+    }
+    instructionClocks--;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void 
