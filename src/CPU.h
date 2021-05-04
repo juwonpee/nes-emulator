@@ -29,8 +29,8 @@ class CPU {
         // Helper variables
         void call(void (CPU::*func)()); // Function to help call other functions in this class
         uint8_t finalData = 0x00; // Final data to instruction
+        uint16_t finalAddress = 0x0000;
         uint8_t instructionClocks = 0x00; // Number of clocks left on instruction
-        enum CPUstate {executing, finished} state;
         struct Instruction {
             std::string Name;
             void (CPU::*AddressModeFunction) (void) = nullptr;
@@ -77,11 +77,11 @@ class CPU {
         void IND();
         // X,ind....X-indexed, indirect...OPC ($LL,X)....operand is zeropage address; effective address is word in (LL + X, LL + X + 1), inc. without carry: C.w($00LL + X)
         void XIN();
-        // ind,Y	indirect, Y-indexed	OPC ($LL),Y	operand is zeropage address; effective address is word in (LL, LL + 1) incremented by Y with carry: C.w($00LL) + Y
+        // ind,Y....indirect, Y-indexed...OPC ($LL),Y....operand is zeropage address; effective address is word in (LL, LL + 1) incremented by Y with carry: C.w($00LL) + Y
         void YIN();
-        // rel......relative OPC $BB	branch target is PC + signed offset BB ***
+        // rel......relative..............OPC $BB........branch target is PC + signed offset BB ***
         void REL();
-        // zpg	zeropage	OPC $LL	operand is zeropage address (hi-byte is zero, address = $00LL)
+        // zpg......zeropage..............OPC $LL........operand is zeropage address (hi-byte is zero, address = $00LL)
         void ZPG();
         // zpg,X	zeropage, X-indexed	OPC $LL,X	operand is zeropage address; effective address is address incremented by X without carry **
         void ZPX();
@@ -121,8 +121,8 @@ class CPU {
         // absolute,Y	ADC oper,Y	    79	    3	    4* 
         // (indirect,X)	ADC (oper,X)    61	    2	    6  
         // (indirect),Y	ADC (oper),Y	71	    2	    5*
-
         void ADC();
+        
         // AND Memory with Accumulator
         // A AND M -> A
         // N Z C I D V
