@@ -45,7 +45,9 @@
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
 			"typeinfo": "cpp",
-			"typeindex": "cpp"
+			"typeindex": "cpp",
+			"numeric": "cpp",
+			"functional": "cpp"
 		},
 		"C_Cpp.default.includePath": [
 			"/usr/local/include/wx-3.1/"

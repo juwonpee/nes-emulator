@@ -141,7 +141,6 @@ void CPU::ZPY() {
 void CPU::AXX() {
     addressMode = axx;
     PC++;
-    NOP();
 }
 
 void CPU::ADC() {
@@ -831,25 +830,260 @@ void CPU::ROL() {
     if (instructionClocks == 0) {
         switch (addressMode) {
             case acc:
-                
+                instructionClocks = 2;
+            case zpg:
+                instructionClocks = 5;
+            case zpx:
+                instructionClocks = 6;
+            case abs:
+                instructionClocks = 6;
+            case abx:
+                instructionClocks = 7;
         }
+        uint16_t temp = (finalData << 1) + SR.C;
+        if (addressMode == acc) {
+            A = temp & 0x00FF;
+        }
+        else {
+            write(finalAddress, temp & 0x00FF);
+        }
+
+        SR.C = temp & 0x0100;
     }
+    instructionClocks--;
 }
 
+void CPU::ROR() {
+    if (instructionClocks == 0) {
+        switch (addressMode) {
+            case acc:
+                instructionClocks = 2;
+            case zpg:
+                instructionClocks = 5;
+            case zpx:
+                instructionClocks = 6;
+            case abs:
+                instructionClocks = 6;
+            case abx:
+                instructionClocks = 7;
+        }
+        uint16_t temp = (SR.C >> 7) + (finalData >> 1);
 
+        SR.C = finalData & 0x01;
+    }
+    instructionClocks--;
+}
 
+void CPU::RTI() {
+    if (instructionClocks == 0) {
+        instructionClocks = 6;
 
+        SP++;
+        uint8_t temp = read(0x0100 + SP);
+        SR.N = temp & 0x80;
+        SR.V = temp & 0x40;
+        SR.B = temp & 0x10;
+        SR.D = temp & 0x08;
+        SR.I = temp & 0x04;
+        SR.Z = temp & 0x02;
+        SR.C = temp & 0x01;
+        SP++;
+        PC = read(0x0100 + SP);
+        SP++;
+        PC = read(0x0100 + SP) << 8;
+        PC = temp;
+    }
+    instructionClocks--;
+}
 
+void CPU::RTS() {
+    if (instructionClocks == 0) {
+        instructionClocks = 6;
 
+        SP++;
+        PC = read(0x0100 + SP);
+        SP++;
+        PC = read(0x0100 + SP) << 8;
+        PC++;
+    }
+    instructionClocks--;
+}
 
+void CPU::SBC() {
+    if (instructionClocks == 0) {
+        switch(addressMode) {
+            case imm:
+                instructionClocks = 2;
+            case zpg:
+                instructionClocks = 3;
+            case zpx:
+                instructionClocks = 4;
+            case abs:
+                instructionClocks = 4;
+            case abx:
+                instructionClocks += 4;
+            case aby:
+                instructionClocks += 4;
+            case xin:
+                instructionClocks = 6;
+            case yin:
+                instructionClocks += 5;
+        }
+        uint16_t temp = A - finalData - SR.C;
+        A = temp & 0x00FF;
 
+        SR.N = temp & 0x0080;
+        SR.Z = !(temp & 0x00FF);
+        SR.C = temp & 0x0100;
+    }
+    instructionClocks--;
+}
 
+void CPU::SEC() {
+    if (instructionClocks == 0) {
+        instructionClocks = 2;
 
+        SR.C = 1;
+    }
+    instructionClocks--;
+}
 
+void CPU::SED() {
+    if (instructionClocks == 0) {
+        instructionClocks = 2;
 
+        SR.D = 1;
+    }
+    instructionClocks--;
+}
 
+void CPU::SEI() {
+    if (instructionClocks == 0) {
+        instructionClocks = 2;
 
+        SR.I = 1;
+    }
+    instructionClocks--;
+}
 
+void CPU::STA() {
+    if (instructionClocks == 0) {
+        switch(addressMode) {
+            case zpg:
+                instructionClocks = 3;
+            case zpx:
+                instructionClocks = 4;
+            case abs:
+                instructionClocks = 4;
+            case abx:
+                instructionClocks = 5;
+            case aby:
+                instructionClocks = 5;
+            case xin:
+                instructionClocks = 6;
+            case yin:
+                instructionClocks = 6;
+        }
+        write(finalAddress, A);
+    }
+    instructionClocks--;
+}
 
+void CPU::STX() {
+    if (instructionClocks == 0) {
+        switch(addressMode) {
+            case zpg:
+                instructionClocks = 3;
+            case zpy:
+                instructionClocks = 4;
+            case abs:
+                instructionClocks = 4;
+        }
+        write(finalAddress, X);
+    }
+    instructionClocks--;
+}
 
+void CPU::STY() {
+    if (instructionClocks == 0) {
+        switch(addressMode) {
+            case zpg:
+                instructionClocks = 3;
+            case zpx:
+                instructionClocks = 4;
+            case abs:
+                instructionClocks = 4;
+        }
+        write(finalAddress, Y);
+    }
+    instructionClocks--;
+}
 
+void CPU::TAX() {
+    if (instructionClocks == 0) {
+        X = A;
+
+        SR.N = X & 0x80;
+        SR.Z = !(X & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::TAY() {
+    if (instructionClocks == 0) {
+        
+        Y = A;
+
+        SR.N = Y & 0x80;
+        SR.Z = !(Y & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::TSX() {
+    if (instructionClocks == 0) {
+
+        X = SP;
+
+        SR.N = X & 0x80;
+        SR.Z = !(X & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::TXA() {
+    if (instructionClocks == 0) {
+
+        A = X;
+        
+        SR.N = X & 0x80;
+        SR.Z = !(X & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::TXS() {
+    if (instructionClocks == 0) {
+
+        SP = X;
+
+        SR.N = X & 0x80;
+        SR.Z = !(X & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::TYA() {
+    if (instructionClocks == 0) {
+
+        A = Y;
+
+        SR.N = X & 0x80;
+        SR.Z = !(X & 0xFF);
+    }
+    instructionClocks--;
+}
+
+void CPU::IXX() {
+    NOP();
+}
