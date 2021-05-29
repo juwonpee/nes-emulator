@@ -28,7 +28,7 @@ class CPU {
         void write(uint16_t address, uint8_t data);
 
 
-        // Helper variables
+        /* Helper variables*/
         void call(void (CPU::*func)()); // Function to help call other functions in this class
         uint8_t finalData = 0x00; // Final data to instruction
         uint16_t finalAddress = 0x0000;
@@ -513,21 +513,155 @@ class CPU {
         // absolute	    ROL oper	2E	    3	    6  
         // absolute,X	ROL oper,X	3E	    3	    7  
         void ROL();
+
+        // Rotate One Bit Right (Memory or Accumulator)
+        // C -> [76543210] -> C
+        // N Z C I D V
+        // + + + - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // accumulator	ROR A	    6A	    1	    2  
+        // zeropage	    ROR oper	66	    2	    5  
+        // zeropage,X	ROR oper,X	76	    2	    6  
+        // absolute	    ROR oper	6E	    3	    6  
+        // absolute,X	ROR oper,X	7E	    3	    7  
         void ROR();
+
+        // Return from Interrupt
+        // pull SR, pull PC
+        // N Z C I D V
+        // from stack
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    RTI	        40	    1	    6  
         void RTI();
+
+        // Return from Subroutine
+        // pull PC, PC+1 -> PC
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    RTS	        60	    1	    6  
         void RTS();
+
+        // Subtract Memory from Accumulator with Borrow
+        // A - M - C -> A
+        // N Z C I D V
+        // + + + - - +
+        // addressing	assembler	opc	    bytes	cyles
+        // immediate	SBC #oper	E9	    2	    2  
+        // zeropage	    SBC oper	E5	    2	    3  
+        // zeropage,X	SBC oper,X	F5	    2	    4  
+        // absolute	    SBC oper	ED	    3	    4  
+        // absolute,X	SBC oper,X	FD	    3	    4* 
+        // absolute,Y	SBC oper,Y	F9	    3	    4* 
+        // (indirect,X)	SBC (oper,X)	E1	2	    6  
+        // (indirect),Y	SBC (oper),Y	F1	2	    5* 
         void SBC();
+
+        // Set Carry Flag
+        // 1 -> C
+        // N Z C I D V
+        // - - 1 - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    SEC	        38	    1	    2  
         void SEC();
+
+        // Set Decimal Flag
+        // 1 -> D
+        // N Z C I D V
+        // - - - - 1 -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    SED	        F8	    1	    2  
         void SED();
+
+        // Set Interrupt Disable Status
+        // 1 -> I
+        // N Z C I D V
+        // - - - 1 - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    SEI	        78	    1	    2  
         void SEI();
+
+        // Store Accumulator in Memory
+        // A -> M
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // zeropage	    STA oper	85	    2	    3  
+        // zeropage,X	STA oper,X	95	    2	    4  
+        // absolute	    STA oper	8D	    3	    4  
+        // absolute,X	STA oper,X	9D	    3	    5  
+        // absolute,Y	STA oper,Y	99	    3	    5  
+        // (indirect,X)	STA (oper,X)	81	2	    6  
+        // (indirect),Y	STA (oper),Y	91	2	    6  
         void STA();
+
+        // Store Index X in Memory
+        // X -> M
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // zeropage	    STX oper	86	    2	    3  
+        // zeropage,Y	STX oper,Y	96	    2	    4  
+        // absolute	    STX oper	8E	    3	    4  
         void STX();
+
+        // Store Index Y in Memory
+        // Y -> M
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // zeropage	    STY oper	84	    2	    3  
+        // zeropage,X	STY oper,X	94	    2	    4  
+        // absolute	    STY oper	8C	    3	    4  
         void STY();
+        
+        // Transfer Accumulator to Index X
+        // A -> X
+        // N Z C I D V
+        // + + - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TAX	        AA	    1	    2  
         void TAX();
+
+        // Transfer Accumulator to Index Y
+        // A -> Y
+        // N Z C I D V
+        // + + - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TAY	        A8	    1	    2  
         void TAY();
+
+        // Transfer Stack Pointer to Index X
+        // SP -> X
+        // N Z C I D V
+        // + + - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TSX	        BA	    1	    2  
         void TSX();
+
+        // Transfer Index X to Accumulator
+        // X -> A
+        // N Z C I D V
+        // + + - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TXA	        8A	    1	    2  
         void TXA();
+
+        // Transfer Index X to Stack Register
+
+        // X -> SP
+        // N Z C I D V
+        // - - - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TXS	        9A	    1	    2  
         void TXS();
+        
+        // Transfer Index Y to Accumulator
+        // Y -> A
+        // N Z C I D V
+        // + + - - - -
+        // addressing	assembler	opc	    bytes	cyles
+        // implied	    TYA	        98	    1	    2  
         void TYA();
         void IXX();
 // * add 1 to cycles if page boundery is crossed
