@@ -5,16 +5,46 @@ void CPU::call(void (CPU::*func)()) {
 }
 
 void CPU::clock() {
-    uint8_t opcode = read(PC);
+    opcode = read(PC);
     if (instructionClocks == 0) { // If available to execute next instruction
         PC++;
         call(lookup[opcode].AddressModeFunction);
         call(lookup[opcode].InstructionFunction);
     }
     else if (instructionClocks > 0) { // If executing function
-        call(lookup[opcode].AddressModeFunction);
+        call(lookup[opcode].InstructionFunction);
     }
 }
+
+uint8_t CPU::read(uint16_t address) {
+    return 0; // TODO: Implement read when cartridge and bus are complete
+}
+
+void CPU::commitMemory() {
+    writeQueueStruct temp;
+    // Write data to memory when instruction is finished
+    if (instructionClocks != 0 &  !writeQueue.empty()) { // Sanity check for bugs
+        temp = writeQueue.front();
+        writeQueue.pop();
+        write(temp.address, temp.data);
+    }
+    else { // Add to queue when instruction is not finished
+        throw std::runtime_error("Bug in instruction" + lookup[opcode].Name);
+    }
+}
+
+void CPU::writeInQueue(uint16_t address, uint8_t data) {
+    writeQueueStruct temp;
+    temp.address = address;
+    temp.data = data;
+    writeQueue.emplace(temp);
+}
+
+void CPU::write(uint16_t address, uint8_t data) {
+
+}
+
+
 void CPU::ACC() {
     addressMode = acc;
     finalData = A;
@@ -196,7 +226,7 @@ void CPU::AND() {
                 instructionClocks += 5;
         }
 
-        uint16_t temp = A + finalData;
+        uint16_t temp = A & finalData;
         A = temp & 0x00FF;
 
         SR.N = temp & 0x0080;
@@ -227,7 +257,7 @@ void CPU::ASL() {
         }
         else {
             temp = finalData << 1;
-            write(finalAddress, temp & 0x00FF);
+            writeInQueue(finalAddress, temp & 0x00FF);
         }
 
         SR.N = temp & 0x0080;
@@ -235,6 +265,9 @@ void CPU::ASL() {
         SR.C = temp & 0x0100;
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::BCC() {
@@ -326,21 +359,24 @@ void CPU::BPL() {
     }
     instructionClocks--;
 }
-//TODO: check brk instruction    
-void CPU::BRK() {
+
+void CPU::BRK() { // TODO: Check brk instruction
     if (instructionClocks == 0) {
         instructionClocks = 7;
-
-        write(0x0100 + SP, PC >> 8);
+        uint16_t temp = PC + 2;
+        writeInQueue(0x0100 + SP, temp >> 8);
         SP--;
-        write(0x0100 + SP, PC & 0x00FF);
+        writeInQueue(0x0100 + SP, temp & 0x00FF);
         SP--;
-        write(0x0100 + SP, STATUSREGISTER);
+        writeInQueue(0x0100 + SP, STATUSREGISTER);
         SP--;
 
         SR.I = true;
     }
     instructionClocks --;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::BVC() {
@@ -513,12 +549,15 @@ void CPU::DEC() {
         }
 
         uint16_t temp = finalData - 1;
-        write(finalAddress, temp & 0x00FF);
+        writeInQueue(finalAddress, temp & 0x00FF);
         
         SR.N = temp & 0x0080;
         SR.Z = !(temp & 0x00FF);
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::DEX() {
@@ -587,11 +626,15 @@ void CPU::INC() {
         }
 
         uint16_t temp = finalData - 1;
-        write(finalAddress, temp & 0x00FF);
+        writeInQueue(finalAddress, temp & 0x00FF);
 
         SR.N = temp & 0x0080;
         SR.Z = !(temp & 0x00FF);
         
+    }
+    instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
     }
 }
 
@@ -638,13 +681,16 @@ void CPU::JSR() {
     if (instructionClocks == 0) {
         instructionClocks = 6;
 
-        write(0x0100 + SP, PC >> 8);
+        writeInQueue(0x0100 + SP, PC >> 8);
         SP--;
-        write(0x0100 + SP, PC & 0x00FF);
+        writeInQueue(0x0100 + SP, PC & 0x00FF);
         SP--;
         PC = finalAddress;
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::LDA() {
@@ -783,20 +829,26 @@ void CPU::PHA() {
     if (instructionClocks == 0) {
         instructionClocks = 3;
 
-        write(0x0100 + SP, A);
+        writeInQueue(0x0100 + SP, A);
         SP--;
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::PHP() {
     if (instructionClocks == 0) {
         instructionClocks = 3;
 
-        write(0x0100 + SP, STATUSREGISTER);
+        writeInQueue(0x0100 + SP, STATUSREGISTER);
         SP--;
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::PLA() {
@@ -845,12 +897,15 @@ void CPU::ROL() {
             A = temp & 0x00FF;
         }
         else {
-            write(finalAddress, temp & 0x00FF);
+            writeInQueue(finalAddress, temp & 0x00FF);
         }
 
         SR.C = temp & 0x0100;
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::ROR() {
@@ -984,9 +1039,12 @@ void CPU::STA() {
             case yin:
                 instructionClocks = 6;
         }
-        write(finalAddress, A);
+        writeInQueue(finalAddress, A);
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::STX() {
@@ -999,9 +1057,12 @@ void CPU::STX() {
             case abs:
                 instructionClocks = 4;
         }
-        write(finalAddress, X);
+        writeInQueue(finalAddress, X);
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::STY() {
@@ -1014,9 +1075,12 @@ void CPU::STY() {
             case abs:
                 instructionClocks = 4;
         }
-        write(finalAddress, Y);
+        writeInQueue(finalAddress, Y);
     }
     instructionClocks--;
+    if (instructionClocks == 0) {
+        commitMemory();
+    }
 }
 
 void CPU::TAX() {

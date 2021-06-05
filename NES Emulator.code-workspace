@@ -47,7 +47,10 @@
 			"typeinfo": "cpp",
 			"typeindex": "cpp",
 			"numeric": "cpp",
-			"functional": "cpp"
+			"functional": "cpp",
+			"bit": "cpp",
+			"iterator": "cpp",
+			"random": "cpp"
 		},
 		"C_Cpp.default.includePath": [
 			"/usr/local/include/wx-3.1/"

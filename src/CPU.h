@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <queue>
 #include "types.h"
 
 #define STATUSREGISTER (SR.N << 7) + (SR.V << 6) + (SR.B << 4) + (SR.D << 3) + (SR.I << 2) + (SR.Z << 1) + (SR.C << 0)
@@ -12,9 +13,10 @@ class CPU {
         void clock(); // Run one clock
 
     private:
+        uint8_t opcode;
         uint8_t A, X, Y, SP;
         uint16_t PC;
-        struct STATUS {
+        struct {
             uint8_t C:1; // Carry
             uint8_t Z:1; // Zero
             uint8_t I:1; // Interrupt disable
@@ -24,7 +26,16 @@ class CPU {
             uint8_t V:1; // Overflow
             uint8_t N:1; // Negative
         } SR;
+
         uint8_t read(uint16_t address);
+
+        struct writeQueueStruct {
+            uint16_t address;
+            uint8_t data;
+        };
+        std::queue<writeQueueStruct> writeQueue;
+        void commitMemory();
+        void writeInQueue(uint16_t address, uint8_t data);
         void write(uint16_t address, uint8_t data);
 
 
