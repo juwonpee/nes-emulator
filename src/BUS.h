@@ -3,13 +3,33 @@
 #include <Cart.h>
 
 
-class Bus {
+class BUS {
     public:
-        Bus(std::string directory);
+        BUS(std::string _directory, graphics* _graphicsQueue, input* _inputQueue);
+        ~BUS();
+
+
+        uint8_t read(uint16_t _address);
+        void write(uint16_t _address, uint8_t _data);
+
+        void write(pixel _pixel);
+        
+        // debug functions
+        uint64_t clocks = 0;
+        void clockTicks(uint64_t _clocks);
     private:
+        graphics* graphicsQueue;
+        input* inputQueue;
+
+
+        uint16_t address;
+        uint8_t data;
+
         std::string directory;
-        CPU nesCPU();
-        Cart nesCartridge(std::string directory);
+        CPU* nesCPU;
+        Cart* nesCartridge;
+
+        void clock();
 
 
 

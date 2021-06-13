@@ -108,8 +108,14 @@ Cart::Cart(std::string directory) {
     // |||| ++++- Vs. PPU Type
     // ++++------ Vs. Hardware Type
     struct {
+        union{
+        uint8_t In;
+        struct{
+
         uint8_t P:4;
         uint8_t M:4;
+        };
+        };
     } TYPE;
 
     std::ifstream iNES(directory, std::ios::binary);
@@ -120,6 +126,7 @@ Cart::Cart(std::string directory) {
         // Check header
         PRGROM = buffer[4];
         CRGROM = buffer[5];
+        TYPE.In = buffer[6];
 
     }
     else {

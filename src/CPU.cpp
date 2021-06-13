@@ -68,7 +68,7 @@ void CPU::ABX() {
     address += X;
     finalData = read(address);
     finalAddress = address;
-    if ((finalData >> 8) != high) { // If the high byte is changed after adding X
+    if ((finalAddress >> 8) != high) { // If the high byte is changed after adding X
         instructionClocks += 1;
     }
 }
