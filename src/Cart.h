@@ -10,8 +10,8 @@ class Cart {
         Cart(std::string directory);
         ~Cart();
 
-        uint8_t get(uint16_t address);
-        void set(uint16_t address, uint8_t data);
+        uint8_t cpuRead(uint16_t address);
+        void cpuWrite(uint16_t address, uint8_t data);
 
     private:
         std::vector<uint8_t> buffer;

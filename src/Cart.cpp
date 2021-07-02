@@ -21,11 +21,16 @@ Cart::Cart(std::string directory) {
     // ||||        1: Yes
     // ++++------ Mapper Number D0..D3
     struct {
-        uint8_t M:1;
-        uint8_t B:1;
-        uint8_t T:1;
-        uint8_t F:1;
-        uint8_t N:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t M:1;
+                uint8_t B:1;
+                uint8_t T:1;
+                uint8_t F:1;
+                uint8_t N:4;
+            };
+        };
     } FLAGS6;
 
     // D~7654 3210
@@ -39,9 +44,14 @@ Cart::Cart(std::string directory) {
     // |||| ++--- NES 2.0 identifier
     // ++++------ Mapper Number D4..D7
     struct {
-        uint8_t T:2;
-        uint8_t NES2:2 = 2;
-        uint8_t N:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t T:2;
+                uint8_t NES2:2;
+                uint8_t N:4;
+            };
+        };
     } FLAGS7;
 
     // D~7654 3210
@@ -50,8 +60,13 @@ Cart::Cart(std::string directory) {
     // |||| ++++- Mapper number D8..D11
     // ++++------ Submapper number
     struct {
-        uint8_t N:4;
-        uint8_t C:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t N:4;
+                uint8_t C:4;       
+            };
+        };
     } MAPPER;
 
     // D~7654 3210
@@ -60,8 +75,13 @@ Cart::Cart(std::string directory) {
     // |||| ++++- PRG-ROM size MSB
     // ++++------ CHR-ROM size MSB
     struct {
-        uint8_t P:4;
-        uint8_t C:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t P:4;
+                uint8_t C:4;
+            };
+        };
     } ROMSIZE;
 
     // D~7654 3210
@@ -73,8 +93,13 @@ Cart::Cart(std::string directory) {
     // If the shift count is non-zero, the actual size is
     // "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
     struct {
-        uint8_t PV:4;
-        uint8_t PN:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t PV:4;
+                uint8_t PN:4;
+            };
+        };
     } EEPROMSIZE;
 
     // D~7654 3210
@@ -86,8 +111,13 @@ Cart::Cart(std::string directory) {
     // If the shift count is non-zero, the actual size is
     // "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
     struct {
-        uint8_t CV:4;
-        uint8_t CN:4;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t CV:4;
+                uint8_t CN:4;
+            };
+        };
     } RAMSIZE;
 
     // D~7654 3210
@@ -99,7 +129,12 @@ Cart::Cart(std::string directory) {
     //             2: Multiple-region
     //             3: UMC 6527P ("Dendy")
     struct {
-        uint8_t V:2;
+        union {
+            uint8_t input;
+            struct {
+                uint8_t V:2;
+            };
+        };
     } TIMING;
 
     // D~7654 3210
@@ -109,14 +144,14 @@ Cart::Cart(std::string directory) {
     // ++++------ Vs. Hardware Type
     struct {
         union{
-        uint8_t In;
-        struct{
-
-        uint8_t P:4;
-        uint8_t M:4;
-        };
+            uint8_t input;
+            struct{
+                uint8_t P:4;
+                uint8_t M:4;
+            };
         };
     } TYPE;
+
 
     std::ifstream iNES(directory, std::ios::binary);
     std::vector<uint8_t> buffer(std::istreambuf_iterator<char>(iNES), {});
@@ -126,7 +161,14 @@ Cart::Cart(std::string directory) {
         // Check header
         PRGROM = buffer[4];
         CRGROM = buffer[5];
-        TYPE.In = buffer[6];
+        FLAGS6.input = buffer[6];
+        FLAGS7.input = buffer[7];
+        MAPPER.input = buffer[8];
+        ROMSIZE.input = buffer[9];
+        EEPROMSIZE.input = buffer[10];
+        RAMSIZE.input = buffer[11];
+        TIMING.input = buffer[12];
+        TYPE.input = buffer[13];
 
     }
     else {
