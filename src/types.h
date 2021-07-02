@@ -1,25 +1,28 @@
+#ifndef TYPES_H
+#define TYPES_H
+
 #include <cstdint>
-#include <queue>
 #include <mutex>
+#include <queue>
 
-using namespace std;
-
-struct pixel {
+typedef struct {
     int x;
     int y;
     int r, g, b;
-};
-struct graphics{
-    queue<pixel> graphicsQueue;
-    mutex lock;
-};
+} pixel;
+typedef struct {
+    std::queue<pixel> pixelQueue;
+    std::mutex lock;
+} graphics;
 
-struct inputFrame {
+typedef struct {
     bool up, down, left, right, select, start, a, b;
-};
-struct input{
-    queue<inputFrame> inputQueue;
-    mutex lock;
-};
+} inputFrame;
+typedef struct {
+    std::queue<inputFrame> inputQueue;
+    std::mutex lock;
+} input;
 
 // TODO: struct for sound
+
+#endif

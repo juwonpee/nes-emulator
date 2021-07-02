@@ -8,6 +8,10 @@
 #define LCROM 0x8000
 #define UCROM 0xc000
 
+MEM::MEM() {
+
+};
+
 uint8_t MEM::read(uint16_t address) {
     if (WRAM <= address && address < IO) {
         // return from WRAM

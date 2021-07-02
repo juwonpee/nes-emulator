@@ -4,28 +4,23 @@
 #include <string>                           // string class
 #include <iostream>                         // cout function
 #include <stdlib.h>                         // exit function
-#include <queue>                            // queue class
 
 #include "BUS.h"
-#if __linux__
-    #include "linux/GUI.h"
-#elif _WIN64
-    #include "win/GUI.h"
-#endif
-
-graphics *graphicsQueue, _graphicsQueue;
-input *inputQueue, _inputQueue;
-// TODO: struct for sound
 
 
-using namespace std;
+graphics _graphics;
+input _input;
+// TODO sound struct
+std::string directory;
+    
+
 
 void cmdHelp() {
-    cout << "help" << endl;
+    std::cout << "help" << std::endl;
 }
 
-void emulationThread(string directory) {
-    BUS emulator(directory, graphicsQueue, inputQueue);
+void emulationThread() {
+    BUS emulator(directory, &_graphics, &_input);
     while(1) {
 
     }
@@ -41,7 +36,8 @@ void soundThread() {
 
 
 int main(int argc, char* argv[]) {
-    string directory;
+
+
     int opt;
 
     while ((opt = getopt(argc, argv, "d:")) != -1) {
@@ -54,12 +50,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    graphicsQueue = &_graphicsQueue;
-    inputQueue = &_inputQueue;
-    graphicsQueue -> lock.unlock();
-    graphicsQueue -> lock.unlock();
+    // sanity unlocking
+    _graphics.lock.unlock();
+    _input.lock.unlock();
 
-    thread NES(emulationThread, directory);
-    // TODO: Graphics thread
+    std::thread emul(emulationThread);
+    std::thread graph(graphicsThread);
+    std::thread sound(soundThread);
     // TODO: APU thread
 }

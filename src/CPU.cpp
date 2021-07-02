@@ -1,5 +1,13 @@
 #include "CPU.h"
 
+CPU::CPU() {
+
+}
+
+CPU::~CPU() {
+    
+}
+
 void CPU::call(void (CPU::*func)()) {
     (this ->*func)();
 }

@@ -175,3 +175,7 @@ Cart::Cart(std::string directory) {
         throw std::runtime_error("Invalid NES ROM format");
     }
 }
+
+Cart::~Cart() {
+    
+}

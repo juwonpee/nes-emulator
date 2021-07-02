@@ -1,9 +1,9 @@
 #include "BUS.h"
 
-BUS::BUS(std::string _directory, graphics* _graphicsQueue, input* _inputQueue) {
+BUS::BUS(std::string _directory, graphics* _graphics, input* _input) {
     directory = _directory;
-    graphicsQueue = _graphicsQueue;
-    inputQueue = _inputQueue;
+    graphicsQueue = _graphics;
+    inputQueue = _input;
     nesCPU = new CPU();
     nesCartridge = new Cart(_directory);
     // TODO: various other classes here

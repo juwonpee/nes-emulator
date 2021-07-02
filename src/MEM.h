@@ -38,4 +38,4 @@ class MEM {
         // Cartridge ROM
         uint8_t lcROM[16384];
         uint8_t ucROM[16384];
-}
+};

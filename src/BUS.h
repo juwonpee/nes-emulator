@@ -1,3 +1,6 @@
+#ifndef BUS_H
+#define BUS_H
+
 #include <types.h>
 #include <CPU.h>
 #include <Cart.h>
@@ -5,7 +8,7 @@
 
 class BUS {
     public:
-        BUS(std::string _directory, graphics* _graphicsQueue, input* _inputQueue);
+        BUS(std::string _directory, graphics* _graphics, input* _input);
         ~BUS();
 
 
@@ -35,3 +38,5 @@ class BUS {
 
     
 };
+
+#endif

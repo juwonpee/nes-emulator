@@ -1,24 +1,26 @@
-#include <../types.h>
+#include <types.h>
 #include <vector>
 
 
 enum memoryType{
-    PRGROM,
-    PRGRAM,
-    CHRROM,
+    _PRGROM,
+    _PRGRAM,
+    _CHRROM,
 };
 
 
 class Mapper000 {
+    
     public:
         Mapper000();
 
         void resize(memoryType _memoryType, int banks, int size) {
             switch (_memoryType) {
-                case PRGROM:
-
-            }
-        }
+                case _PRGROM:
+                    // TODO ***TEMPORARY FILLER***
+                    _memoryType = _PRGRAM;
+            };
+        };
 
         uint8_t CPUread(uint16_t address) {
 
