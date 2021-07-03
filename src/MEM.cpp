@@ -40,4 +40,5 @@ uint8_t MEM::read(uint16_t address) {
         // TODO
         return ucROM[address - UCROM];
     }
+    return 0;
 }

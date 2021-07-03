@@ -50,7 +50,14 @@
 			"functional": "cpp",
 			"bit": "cpp",
 			"iterator": "cpp",
-			"random": "cpp"
+			"random": "cpp",
+			"chrono": "cpp",
+			"condition_variable": "cpp",
+			"ctime": "cpp",
+			"ratio": "cpp",
+			"iostream": "cpp",
+			"mutex": "cpp",
+			"thread": "cpp"
 		},
 		"C_Cpp.default.includePath": [
 			"/usr/local/include/wx-3.1/"

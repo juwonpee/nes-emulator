@@ -1,4 +1,5 @@
 CC = g++
+CCPARAMS = -pipe -O2
 
 LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
 
@@ -11,4 +12,8 @@ OUTPUT_DIR = build/
 
 all: $(MODULES)
 	clear
-	$(CC) -Isrc $^ -o $(BUILD_DIR)NES $(LIBARIES)
+	$(CC) $(CCPARAMS) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)
+
+debug: $(MODULES)
+	clear
+	$(CC) -g $(CCPARAMS) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)

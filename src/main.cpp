@@ -20,6 +20,7 @@ void cmdHelp() {
 }
 
 void emulationThread() {
+    std::cout << "In emulation Thread" << std::endl;
     BUS emulator(directory, &_graphics, &_input);
     while(1) {
 
@@ -36,18 +37,20 @@ void soundThread() {
 
 
 int main(int argc, char* argv[]) {
-
+    std::cout << "main thread" << std::endl;
 
     int opt;
 
     while ((opt = getopt(argc, argv, "d:")) != -1) {
         switch (opt) {
             case 'd':
+                std::cout << directory << std::endl;
                 directory = optarg;
-            default:
-                cmdHelp();
-                exit(EXIT_FAILURE);
         }
+    }
+    if (directory == "") {
+        cmdHelp();
+        exit(EXIT_FAILURE);
     }
 
     // sanity unlocking
@@ -58,4 +61,7 @@ int main(int argc, char* argv[]) {
     std::thread graph(graphicsThread);
     std::thread sound(soundThread);
     // TODO: APU thread
+    emul.join();
+    graph.join();
+    sound.join();
 }

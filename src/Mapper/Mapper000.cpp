@@ -23,19 +23,19 @@ class Mapper000 {
         };
 
         uint8_t CPUread(uint16_t address) {
-
+            return 0;
         };
 
         void CPUwrite(uint16_t address, uint8_t data) {
-
+            return;
         };
 
         uint8_t PPUread(uint16_t address) {
-
+            return 0;
         };
 
         void PPUwrite(uint16_t address, uint8_t data) {
-
+            return;
         };
     
     private:
