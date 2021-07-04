@@ -33,22 +33,16 @@ uint8_t BUS::read(uint16_t _address) {
     }
     else if (_address < 0x4000) {
         // TODO: Mirror of 0x2000~0x2007
-        // Mirrored 1023 times, not including 0x2000~0x2007
+        // repeats every 8 bytes
+    }
+    else if (_address < 0x4018) {
+        // APU & IO registers
     }
     else if (_address < 0x4020) {
-        // TODO: Registers (Mostly APU)
+        // NES test mode
     }
-    else if (_address < 0x6000) {
+    else if (_address < 0xFFFF) {
         // TODO: Cartridge expansion rom
-    }
-    else if (_address < 0x8000) {
-        // TODO: SRAM
-    }
-    else if (_address < 0xC000) {
-        // TODO: PRG-ROM
-    }
-    else if (_address < 0x4000) {
-        // TODO: more PRG-ROM
     }
     return 0;
 }

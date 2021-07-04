@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <Mapper.h>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ class Cart {
 
     private:
         uint8_t PRGROM;
-        uint8_t CRGROM;
+        uint8_t CHRROM;
 
         // D~7654 3210
         // ---------
@@ -62,11 +63,57 @@ class Cart {
                 uint8_t input;
                 struct {
                     uint8_t T:2;
-                    uint8_t NES2:2;
+                    uint8_t iNES2:2;
                     uint8_t N:4;
                 };
             };
         } FLAGS7;
+
+//-------------------iNES1.0 FORMAT------------------------
+
+        // 76543210
+        // ||||||||
+        // ++++++++- PRG RAM size
+        struct {
+            union {
+                uint8_t input;
+                uint8_t PRGRAM;
+            };
+        } FLAGS8;
+
+        // 76543210
+        // ||||||||
+        // |||||||+- TV system (0: NTSC; 1: PAL)
+        // +++++++-- Reserved, set to zero
+        struct {
+            union {
+                uint8_t input;
+                struct {
+                    uint8_t TYSystem:1;
+                    uint8_t reserved:7;
+                };
+            };
+        } FLAGS9;
+
+        // 76543210
+        // ||  ||
+        // ||  ++- TV system (0: NTSC; 2: PAL; 1/3: dual compatible)
+        // |+----- PRG RAM ($6000-$7FFF) (0: present; 1: not present)
+        // +------ 0: Board has no bus conflicts; 1: Board has bus conflicts
+        struct {
+            union {
+                uint8_t input;
+                struct {
+                    uint8_t reserved0:2;
+                    uint8_t TYSystem:2;
+                    uint8_t reserved1:2;
+                    uint8_t PRGRAMPresent:1;
+                    uint8_t BUSConflicts:1;
+                };
+            };
+        } FLAGS10;
+
+//-------------------iNES2.0 FORMAT------------------------
 
         // D~7654 3210
         // ---------
@@ -168,8 +215,15 @@ class Cart {
 
         ifstream iNES;
         vector<uint8_t>* buffer;
-        void init();
-        
+        vector<uint8_t> trainer;
+        vector<uint8_t> bufferPRGROM;
+        vector<uint8_t> bufferCHRROM;
+
+        Mapper mapper;
+
+        void iNES1();
+        void iNES2();
+
 
 
 };
