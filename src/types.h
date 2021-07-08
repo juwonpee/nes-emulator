@@ -25,4 +25,15 @@ typedef struct {
 
 // TODO: struct for sound
 
+
+enum mirrorType {
+    horizontal = 0,
+    vertical = 1
+};
+enum screenType {
+    single = 0,
+    quad = 1
+};
+
+
 #endif

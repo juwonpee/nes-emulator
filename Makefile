@@ -1,5 +1,6 @@
 CC = g++
 CCPARAMS = -pipe -O2
+CCPARAMS_DEBUG = -g -pipe -Og
 
 LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
 
@@ -16,4 +17,4 @@ all: $(MODULES)
 
 debug: $(MODULES)
 	clear
-	$(CC) -g $(CCPARAMS) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)
+	$(CC) $(CCPARAMS_DEBUG) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)

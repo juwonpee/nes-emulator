@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++ build active file",
+            "label": "g++ debug build",
             "command": "make",
             "args": [
                 "debug"

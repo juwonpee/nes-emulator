@@ -9,11 +9,15 @@ using namespace std;
 class Cart {
     public:
 
-        Cart(string directory);
+        Cart(string PRGROMdirectory, string PRGRAMdirectory);
         ~Cart();
 
-        uint8_t cpuRead(uint16_t address);
-        void cpuWrite(uint16_t address, uint8_t data);
+        uint8_t CPUread(uint16_t address);
+        void CPUwrite(uint16_t address, uint8_t data);
+
+        uint8_t PPUread(uint16_t address);
+        void PPUwrite(uint16_t address, uint8_t data);
+        
 
     private:
         uint8_t PRGROM;
@@ -217,9 +221,10 @@ class Cart {
         vector<uint8_t>* buffer;
         vector<uint8_t> trainer;
         vector<uint8_t> bufferPRGROM;
+        vector<uint8_t> bufferPRGRAM;
         vector<uint8_t> bufferCHRROM;
 
-        Mapper mapper;
+        Mapper* mapper;
 
         void iNES1();
         void iNES2();

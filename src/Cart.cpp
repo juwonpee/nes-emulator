@@ -6,14 +6,16 @@
 
 using namespace std;
 
-Cart::Cart(string directory) {
+Cart::Cart(string PRGROMdirectory, string PRGRAMdirectory) {
     
-    iNES.open(directory, ios::binary);
+    iNES.open(PRGROMdirectory, ios::binary);
     if (iNES.fail()) {
         cout << "File does not exist" << endl;
         exit(EXIT_FAILURE);
     }
-    
+    if (PRGRAMdirectory == "") {
+        // TODO: implement PRGRAM, Battery backed up cartridge RAM
+    }
 
 
     buffer = new vector<uint8_t>(istreambuf_iterator<char>(iNES), {});
@@ -47,7 +49,7 @@ Cart::Cart(string directory) {
     }
     copy(&(*buffer)[bufferPointer], &(*buffer)[bufferPointer + PRGROM * 16384], back_inserter(bufferPRGROM));
     bufferPointer += PRGROM * 16384;
-    copy(&(*buffer)[bufferPointer], &(*buffer)[bufferPointer + CHRROM * 8192], back_inserter(bufferPRGROM));
+    copy(&(*buffer)[bufferPointer], &(*buffer)[bufferPointer + CHRROM * 8192], back_inserter(bufferCHRROM));
     
 
     if (FLAGS7.iNES2 == 0b10) iNES2();
@@ -56,16 +58,35 @@ Cart::Cart(string directory) {
 
 }
 
+uint8_t Cart::CPUread(uint16_t address) {
+    return mapper -> CPUread(address);
+}
+
+void Cart::CPUwrite(uint16_t address, uint8_t data) {
+    return mapper -> CPUwrite(address, data);
+}
+
+uint8_t Cart::PPUread(uint16_t address) {
+    return mapper -> CPUread(address);
+}
+
+void Cart::PPUwrite(uint16_t address, uint8_t data) {
+    return mapper -> CPUwrite(address, data);
+}
+
 Cart::~Cart() {
     
 }
 
 void Cart::iNES1() {
-    cout << "iNES1.0" << endl;
-    int mapperNumber = FLAGS6.N + FLAGS7.N << 4;
-    mapper.init(mapperNumber, PRGROM, CHRROM, trainer, bufferPRGROM, bufferCHRROM);
+    cout << "ROM header format: iNES1.0" << endl;
+    int mapperNumber = FLAGS6.N + (FLAGS7.N << 4);
+    cout << "Mapper number: " << mapperNumber << endl;
+    cout << "Program ROM Size: " << (int)PRGROM * 16384 << endl;
+    cout << "Character ROM Size: " << (int) CHRROM * 8192 << endl;
+    mapper = new Mapper(mapperNumber, PRGROM, CHRROM, static_cast<mirrorType>(FLAGS6.M), static_cast<screenType>(FLAGS6.F), trainer, bufferPRGROM, bufferCHRROM);
 }
 
 void Cart::iNES2() {
-    cout << "iNES2.0" <<endl;
+    cout << "ROM header format: iNES2.0" << endl;
 }
