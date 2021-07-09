@@ -1,30 +1,41 @@
+#pragma once
+
 #include <string>
 #include <vector>
 #include <queue>
+
 #include "types.h"
 
-#define STATUSREGISTER (SR.N << 7) + (SR.V << 6) + (SR.B << 4) + (SR.D << 3) + (SR.I << 2) + (SR.Z << 1) + (SR.C << 0)
+class BUS;
 
 class CPU {
     public:
-        CPU();
+        CPU(BUS* b);
         ~CPU();
-        void connectToBus (void* BUS); // Connect to the bus to access its functions
         void clock(); // Run one clock
 
+        void reset(); // Force CPU into known state to start execution
+
     private:
+        BUS* bus = nullptr;
+
         uint8_t opcode;
         uint8_t A, X, Y, SP;
         uint16_t PC;
         struct {
-            uint8_t C:1; // Carry
-            uint8_t Z:1; // Zero
-            uint8_t I:1; // Interrupt disable
-            uint8_t D:1; // Decimal mode
-            uint8_t B:1; // Break
-            uint8_t ignore:1; // ignored
-            uint8_t V:1; // Overflow
-            uint8_t N:1; // Negative
+            union {
+                uint8_t byte;
+                struct {
+                    uint8_t C:1; // Carry
+                    uint8_t Z:1; // Zero
+                    uint8_t I:1; // Interrupt disable
+                    uint8_t D:1; // Decimal mode
+                    uint8_t B:1; // Break
+                    uint8_t ignore:1; // ignored
+                    uint8_t V:1; // Overflow
+                    uint8_t N:1; // Negative
+                };
+            };
         } SR;
 
         uint8_t read(uint16_t address);

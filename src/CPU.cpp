@@ -1,11 +1,21 @@
 #include "CPU.h"
+#include "BUS.h" // Prevent circular inclusion from BUS class
 
-CPU::CPU() {
-
+CPU::CPU(BUS* b) {
+    bus = b;
 }
 
 CPU::~CPU() {
     
+}
+
+void CPU::reset() {
+    A = 0x00;
+    X = 0x00;
+    Y = 0x00;
+    PC = (read(0xFFFC + 1) << 8) + read(0xFFFC);
+    SP = 0x00;
+
 }
 
 void CPU::call(void (CPU::*func)()) {
@@ -25,7 +35,7 @@ void CPU::clock() {
 }
 
 uint8_t CPU::read(uint16_t address) {
-    return 0; // TODO: Implement read when cartridge and bus are complete
+    return bus -> CPUread(address);
 }
 
 void CPU::commitMemory() {
@@ -37,7 +47,7 @@ void CPU::commitMemory() {
         write(temp.address, temp.data);
     }
     else { // Add to queue when instruction is not finished
-        throw std::runtime_error("Bug in instruction" + lookup[opcode].Name);
+        throw std::runtime_error("Bug in instruction, Clock not in sync" + lookup[opcode].Name);
     }
 }
 
@@ -49,7 +59,7 @@ void CPU::writeInQueue(uint16_t address, uint8_t data) {
 }
 
 void CPU::write(uint16_t address, uint8_t data) {
-
+    bus -> CPUwrite(address, data);
 }
 
 
@@ -376,7 +386,7 @@ void CPU::BRK() { // TODO: Check brk instruction
         SP--;
         writeInQueue(0x0100 + SP, temp & 0x00FF);
         SP--;
-        writeInQueue(0x0100 + SP, STATUSREGISTER);
+        writeInQueue(0x0100 + SP, SR.byte);
         SP--;
 
         SR.I = true;
@@ -850,7 +860,7 @@ void CPU::PHP() {
     if (instructionClocks == 0) {
         instructionClocks = 3;
 
-        writeInQueue(0x0100 + SP, STATUSREGISTER);
+        writeInQueue(0x0100 + SP, SR.byte);
         SP--;
     }
     instructionClocks--;

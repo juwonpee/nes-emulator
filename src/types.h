@@ -9,19 +9,19 @@ typedef struct {
     int x;
     int y;
     int r, g, b;
-} pixel;
+} pixel_t;
 typedef struct {
-    std::queue<pixel> pixelQueue;
+    std::queue<pixel_t> pixelQueue;
     std::mutex lock;
-} graphics;
+} graphics_t;
 
 typedef struct {
     bool up, down, left, right, select, start, a, b;
-} inputFrame;
+} inputFrame_t;
 typedef struct {
-    std::queue<inputFrame> inputQueue;
+    std::queue<inputFrame_t> inputQueue;
     std::mutex lock;
-} input;
+} input_t;
 
 // TODO: struct for sound
 

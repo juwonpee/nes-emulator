@@ -1,9 +1,9 @@
 #include "types.h"
 #include <vector>
-#include <Mapper/Mapper000.h>
-#include <Mapper/Mapper002.h>
-#include <Mapper/Mapper094.h>
-#include <Mapper/Mapper180.h>
+#include <Mapper000.h>
+#include <Mapper002.h>
+#include <Mapper094.h>
+#include <Mapper180.h>
 
 
 using namespace std;

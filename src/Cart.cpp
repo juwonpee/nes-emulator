@@ -75,7 +75,8 @@ void Cart::PPUwrite(uint16_t address, uint8_t data) {
 }
 
 Cart::~Cart() {
-    
+    delete buffer;
+    delete mapper;
 }
 
 void Cart::iNES1() {

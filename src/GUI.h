@@ -6,6 +6,7 @@ class GUI {
     public:
         GUI();
         ~GUI();
+
     
     private:
         sf::RenderWindow* window;

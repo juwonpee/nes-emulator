@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "types.h"
-#include "Mapper/Mapper180.h"
+#include "Mapper180.h"
 
 using namespace std;
 

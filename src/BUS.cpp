@@ -2,20 +2,24 @@
 
 using namespace std;
 
-BUS::BUS(string _PRGROMdirectory, string _PRGRAMdirectory, graphics* _graphics, input* _input) {
+BUS::BUS(string _PRGROMdirectory, string _PRGRAMdirectory, graphics_t* graphics, input_t* input) {
     PRGROMdirectory = _PRGROMdirectory;
     PRGRAMdirectory = _PRGRAMdirectory;
-    graphicsQueue = _graphics;
-    inputQueue = _input;
+    graphicsQueue = graphics;
+    inputQueue = input;
     ram = new RAM();
-    nesCPU = new CPU();
     nesCartridge = new Cart(_PRGROMdirectory, _PRGRAMdirectory);
+    nesCPU = new CPU(this);
     // TODO: various other classes here
 }
 
 BUS::~BUS() {
+    delete graphicsQueue;
+    delete inputQueue;
+
     delete nesCPU;
     delete nesCartridge;
+    delete ram;
 }
 
 uint8_t BUS::CPUread(uint16_t _address) {
@@ -72,10 +76,19 @@ void BUS::CPUwrite(uint16_t _address, uint8_t _data) {
     }
 }
 
-void BUS::clock() {
-    while (1) {
-        nesCPU -> clock();
-    // TODO: PPU, APU
-
+void BUS::clock(uint64_t _clocks) {
+    if (_clocks == 0) {
+        while(1) {
+            clocks++;
+            // Implement clock timing
+            nesCPU -> clock();
+        }
+    }
+    else {
+        for (int __clocks = 0; __clocks < _clocks; __clocks++) {
+            cout << "Executing clock: " << (long long) clocks << endl;
+            clocks++;
+            nesCPU -> clock();
+        }
     }
 }

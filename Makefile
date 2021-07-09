@@ -1,20 +1,23 @@
 CC = g++
-CCPARAMS = -pipe -O2
-CCPARAMS_DEBUG = -g -pipe -Og
+CC_INCLUDE = src/
+CCFLAGS = -pipe -O2
+CCFLAGS_DEBUG = -g -pipe -Og
 
 LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
 
 SRC_DIR = src/
 OBJECT_DIR = build/object_files/
-MODULES = $(wildcard $(SRC_DIR)*.cpp) $(wildcard $(SRC_DIR)Mapper/*.cpp)
+OUTPUT = build/NES
+MODULES = $(wildcard $(SRC_DIR)*.cpp)
+MODULES := $(notdir $(MODULES))
 OBJECTS = $(wildcard $(OBJECT_DIR)*.o)
-OUTPUT_DIR = build/
+
 
 
 all: $(MODULES)
 	clear
-	$(CC) $(CCPARAMS) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)
+	$(CC) $(OBJECTS) -o $(OUTPUT) $(LIBARIES)
 
-debug: $(MODULES)
-	clear
-	$(CC) $(CCPARAMS_DEBUG) -Isrc $^ -o $(OUTPUT_DIR)NES $(LIBARIES)
+%.cpp:
+	$(CC) $(CCFLAGS_DEBUG) -I$(CC_INCLUDE) -c $(SRC_DIR)$@ -o $(OBJECT_DIR)$(addsuffix .o,$(basename $@))
+
