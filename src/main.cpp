@@ -17,31 +17,35 @@ input_t input;
 string PRGROMdirectory;
 string PRGRAMdirectory;
 bool debugMode = false;
+bool cpuDebugMode = false;
     
 
 
 void cmdHelp() {
-    cout << "NES emulator, source: github.com/juwonpee/NES-emulator" << endl;
+    cout << "NES emulator, source: https://github.com/juwonpee/NES-emulator" << endl;
     cout << "Parameters:" << endl;
-    cout << "-r <Directory of NES ROM>(REQUIRED PARAMETER) " << endl << "ROM directory parameter" << endl;
-    cout << "-s <Directory of NES save game " << endl << "Save game directory parameter" << endl;
-    cout << "-d " << endl << "Debug mode, manually increment clock ticks" << endl;
+    cout << "-r <Directory of NES ROM>(REQUIRED PARAMETER) ROM directory parameter" << endl;
+    cout << "-s <Directory of NES save game> Save game directory parameter" << endl;
+    cout << "-d Debug mode, manually increment clock ticks" << endl;
+    cout << "-c CPU only debug mode, manually increment clock ticks" << endl;
 }
 
 void emulationThread() {
     cout << "In emulation Thread" << endl;
     BUS emulator(PRGROMdirectory, PRGRAMdirectory, &graphics, &input);
-    if (debugMode == false) {
-        emulator.clock(0);
-    }
-    else {
+    if (debugMode || cpuDebugMode) {
         while(1) {
+            emulator.dumpCPU();
+            cout << "Enter number of clocks to execute" << endl;
             int clocks;
             cin >> clocks;
+            cout << "Executing " << clocks << " clocks" << endl;
             emulator.clock(clocks);
         }
     }
-
+    else {
+        emulator.clock(0);
+    }
 }
 
 void graphicsThread() {
@@ -59,7 +63,7 @@ int main(int argc, char* argv[]) {
     cout << "main thread" << endl;
 
     int opt;
-    while ((opt = getopt(argc, argv, "r:s:d")) != -1) {
+    while ((opt = getopt(argc, argv, "r:s:dc")) != -1) {
         switch (opt) {
             case 'r':
                 PRGROMdirectory = optarg;
@@ -71,7 +75,11 @@ int main(int argc, char* argv[]) {
                 continue;
             case 'd':
                 cout << "Launching in debug mode" << endl;
+                debugMode = true;
                 continue;
+            case 'c':
+                cout << "Launching in CPU only debug mode" << endl;
+                cpuDebugMode = true;
 
         }
     }
@@ -84,17 +92,23 @@ int main(int argc, char* argv[]) {
     graphics.lock.unlock();
     input.lock.unlock();
 
-    thread graph(graphicsThread);
-    thread emul(emulationThread);
-    thread sound(soundThread);
+    thread* emul = new thread(emulationThread);
+    thread* graph;
+    thread* sound;
+    if (!cpuDebugMode) {
+        graph = new thread(graphicsThread);
+        sound = new thread(soundThread);
+    }
     // TODO: APU thread
 
-    graph.join();
-    cout << "graphics thread joined" << endl;
-    emul.join();
+    emul -> join();
     cout << "emulation thread joined" << endl;
-    sound.join();
-    cout << "sound thread joined" << endl;
+    if (!cpuDebugMode) {
+        graph -> join();
+        cout << "graphics thread joined" << endl;
+        sound ->join();
+        cout << "sound thread joined" << endl;
+    }
     
     cout << "graceful exit" << endl;
     return 0;

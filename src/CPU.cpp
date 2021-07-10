@@ -3,6 +3,7 @@
 
 CPU::CPU(BUS* b) {
     bus = b;
+    reset();
 }
 
 CPU::~CPU() {
@@ -15,7 +16,18 @@ void CPU::reset() {
     Y = 0x00;
     PC = (read(0xFFFC + 1) << 8) + read(0xFFFC);
     SP = 0x00;
+}
 
+CPUstatus CPU::dumpCPU() {
+    CPUstatus temp;
+    temp.A = A;
+    temp.X = X;
+    temp.Y = Y;
+    temp.SP = SP;
+    temp.SR = SR;
+    temp.PC = PC;
+    temp.opcode = lookup[opcode].Name;
+    return temp;
 }
 
 void CPU::call(void (CPU::*func)()) {
@@ -47,7 +59,7 @@ void CPU::commitMemory() {
         write(temp.address, temp.data);
     }
     else { // Add to queue when instruction is not finished
-        throw std::runtime_error("Bug in instruction, Clock not in sync" + lookup[opcode].Name);
+        throw std::runtime_error("Bug in instruction, Clock not in sync: " + lookup[opcode].Name);
     }
 }
 

@@ -26,6 +26,8 @@ class BUS {
         // debug functions
         uint64_t clocks = 0;
         void clock(uint64_t _clocks);
+        void dumpCPU();
+
     private:
         graphics_t* graphicsQueue;
         input_t* inputQueue;

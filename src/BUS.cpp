@@ -10,7 +10,7 @@ BUS::BUS(string _PRGROMdirectory, string _PRGRAMdirectory, graphics_t* graphics,
     ram = new RAM();
     nesCartridge = new Cart(_PRGROMdirectory, _PRGRAMdirectory);
     nesCPU = new CPU(this);
-    // TODO: various other classes here
+    // TODO: APU PPU classes here
 }
 
 BUS::~BUS() {
@@ -86,9 +86,31 @@ void BUS::clock(uint64_t _clocks) {
     }
     else {
         for (int __clocks = 0; __clocks < _clocks; __clocks++) {
-            cout << "Executing clock: " << (long long) clocks << endl;
-            clocks++;
+            cout << "Executing clock: " << __clocks + 1 << " of " << _clocks << endl;
             nesCPU -> clock();
+            clocks++;
+            dumpCPU();
         }
+        cout << "Total " << clocks << " executed" << endl;
     }
+}
+
+void BUS::dumpCPU() {
+    cout << "CPU registers" << endl;
+    CPUstatus temp = nesCPU -> dumpCPU();
+    cout << "opcode : " << temp.opcode << endl;
+    cout << "A   : " << hex << temp.A << endl;
+    cout << "X   : " << hex << temp.X << endl;
+    cout << "Y   : " << hex << temp.Y << endl;
+    cout << "SP  : " << hex << temp.SP << endl;
+    cout << "PC  : " << hex << temp.PC << endl;
+    cout << "SR  : " << hex << temp.SR.byte << endl;
+    cout << "Carry     : " << temp.SR.C << endl;
+    cout << "Zero      : " << temp.SR.Z << endl;
+    cout << "Interrupt : " << temp.SR.I << endl;
+    cout << "Decimal   : " << temp.SR.D << endl;
+    cout << "Break     : " << temp.SR.B << endl;
+    cout << "Ignore    : " << temp.SR.ignore << endl;
+    cout << "Carry     : " << temp.SR.C << endl;
+    cout << "Negative  : " << temp.SR.N << endl << endl;
 }

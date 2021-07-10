@@ -5,7 +5,7 @@
             "label": "g++ debug build",
             "command": "make",
             "args": [
-                "debug"
+                "all", "-j$(nproc)"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
