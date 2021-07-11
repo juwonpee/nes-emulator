@@ -28,11 +28,9 @@ uint8_t Mapper000::CPUread(uint16_t address) {
     if (address >= 0x8000 && address < 0xC000) {
         return PRGROM[address - 0x8000];
     }
-    else if (PRGROMSize > 1) {
-        return PRGROM[address - 0x8000];
-    }
     else {
-        return PRGROM[address - 0xC000];
+        if (PRGROMSize == 2) return PRGROM[address - 0x8000];
+        else return PRGROM[address - 0xC000];
     }
     return 0;
 }

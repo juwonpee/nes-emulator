@@ -99,18 +99,65 @@ void BUS::dumpCPU() {
     cout << "CPU registers" << endl;
     CPUstatus temp = nesCPU -> dumpCPU();
     cout << "opcode : " << temp.opcode << endl;
-    cout << "A   : " << hex << temp.A << endl;
-    cout << "X   : " << hex << temp.X << endl;
-    cout << "Y   : " << hex << temp.Y << endl;
-    cout << "SP  : " << hex << temp.SP << endl;
+    cout << "Instruction Clocks : " << hex << (uint16_t)temp.instructionClocks << endl;
+    cout << "Instruction Mode : ";
+    switch (temp.addressMode) {
+        case acc:
+            cout << "acc" << endl;
+            break;
+        case abl:
+            cout << "abl" << endl;
+            break;
+        case abx:
+            cout << "abx" << endl;
+            break;
+        case aby:
+            cout << "aby" << endl;
+            break;
+        case imm:
+            cout << "imm" << endl;
+            break;
+        case imp:
+            cout << "imp" << endl;
+            break;
+        case ind:
+            cout << "ind" << endl;
+            break;
+        case xin:
+            cout << "xin" << endl;
+            break;
+        case yin:
+            cout << "yin" << endl;
+            break;
+        case rel:
+            cout << "rel" << endl;
+            break;
+        case zpg:
+            cout << "zpg" << endl;
+            break;
+        case zpx:
+            cout << "zpx" << endl;
+            break;
+        case zpy:
+            cout << "zpy" << endl;
+            break;
+        case axx:
+            cout << "axx" << endl;
+            break;
+    }
+    cout << "A   : " << hex << (uint16_t)temp.A << endl;
+    cout << "X   : " << hex << (uint16_t)temp.X << endl;
+    cout << "Y   : " << hex << (uint16_t)temp.Y << endl;
+    cout << "SP  : " << hex << (uint16_t)temp.SP << endl;
     cout << "PC  : " << hex << temp.PC << endl;
-    cout << "SR  : " << hex << temp.SR.byte << endl;
-    cout << "Carry     : " << temp.SR.C << endl;
-    cout << "Zero      : " << temp.SR.Z << endl;
-    cout << "Interrupt : " << temp.SR.I << endl;
-    cout << "Decimal   : " << temp.SR.D << endl;
-    cout << "Break     : " << temp.SR.B << endl;
-    cout << "Ignore    : " << temp.SR.ignore << endl;
-    cout << "Carry     : " << temp.SR.C << endl;
-    cout << "Negative  : " << temp.SR.N << endl << endl;
+    cout << "SR  : " << hex << (uint16_t)temp.SR.byte << endl;
+    cout << "Status Registers" << endl;
+    cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
+    cout << "Zero      : " << hex << (uint16_t)temp.SR.Z << endl;
+    cout << "Interrupt : " << hex << (uint16_t)temp.SR.I << endl;
+    cout << "Decimal   : " << hex << (uint16_t)temp.SR.D << endl;
+    cout << "Break     : " << hex << (uint16_t)temp.SR.B << endl;
+    cout << "Ignore    : " << hex << (uint16_t)temp.SR.ignore << endl;
+    cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
+    cout << "Negative  : " << hex << (uint16_t)temp.SR.N << endl << endl;
 }

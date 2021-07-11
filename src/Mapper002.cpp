@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Mapper002::Mapper002(
+Mapper002:: Mapper002(
     mirrorType _mirror,
     vector<uint8_t> PRGROMData
 )
@@ -14,19 +14,22 @@ Mapper002::Mapper002(
     mirror = _mirror;
     PRGROM = PRGROMData;
     PRGROMSize = PRGROM.size()/16384;
-    PRGROMLastBankPointer = (PRGROMSize - 2) * 16384;
+    PRGROMLastBankPointer = (PRGROMSize - 1) * 16384;
     CHRRAM.reserve(8192);
 }
 
 uint8_t Mapper002::CPUread(uint16_t address) {
     if (address >= 0x8000 && address < 0xC000) {
-        address -= 0x8000;
-        address += PRGROMMapNumber * 16384;
-        return PRGROM[address];
+        uint32_t temp = address;
+        temp -= 0x8000;
+        temp += PRGROMMapNumber * 16384;
+        return PRGROM[temp];
     }
     else {
-        address = address - 0xC000 + PRGROMLastBankPointer;
-        return PRGROM[address];
+        uint32_t temp = address;
+        temp -= 0xC000;
+        temp += PRGROMLastBankPointer;
+        return PRGROM[temp];
     }
     return 0;
 }

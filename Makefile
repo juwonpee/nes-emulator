@@ -1,7 +1,7 @@
 CC = g++
 CC_INCLUDE = src/
 CCFLAGS = -pipe -O2
-CCFLAGS_DEBUG = -g -pipe -Og
+CCFLAGS_DEBUG = -g -pipe -O0
 
 LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
 

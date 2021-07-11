@@ -55,15 +55,21 @@ typedef struct {
     };
 } SR_t;
 
+enum addressingMode {
+    acc, abl, abx, aby, imm, imp, ind, xin, yin, rel, zpg, zpx, zpy, axx
+} ;
+
 // Structs used for debugging
 typedef struct {
+    string opcode;
+    uint8_t instructionClocks;
+    addressingMode addressMode;
     uint8_t A;
     uint8_t X;
     uint8_t Y;
     uint8_t SP;
     SR_t SR;
     uint16_t PC;
-    string opcode;
 } CPUstatus;
 
 

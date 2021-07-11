@@ -21,9 +21,9 @@ class CPU {
     private:
         BUS* bus = nullptr;
 
-        uint8_t opcode;
+        uint8_t opcode = 0x00;
         uint8_t A, X, Y, SP = 0x00;
-        uint16_t PC;
+        uint16_t PC = 0x0000;
         SR_t SR;
 
         uint8_t read(uint16_t address);
@@ -70,9 +70,7 @@ class CPU {
         };
         
         // Addressing modes
-        enum addressingMode {
-            acc, abs, abx, aby, imm, imp, ind, xin, yin, rel, zpg, zpx, zpy, axx
-        } addressMode;
+        addressingMode addressMode;
         // operand is AC (implied single byte instruction)
         void ACC();
         // abs......absolute..............OPC $LLHH......operand is address $HHLL *

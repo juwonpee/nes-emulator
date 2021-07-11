@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/NES",
-            "args": ["-r", "LoopZ.nes", "-c"],
+            "args": ["-r", "nestest.nes", "-c"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
             "environment": [],
