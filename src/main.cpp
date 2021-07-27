@@ -80,6 +80,7 @@ int main(int argc, char* argv[]) {
             case 'c':
                 cout << "Launching in CPU only debug mode" << endl;
                 cpuDebugMode = true;
+                continue;
 
         }
     }

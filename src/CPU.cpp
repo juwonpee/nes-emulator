@@ -21,7 +21,7 @@ void CPU::reset() {
 CPUstatus CPU::dumpCPU() {
     CPUstatus temp;
     temp.opcode = lookup[opcode].Name;
-    temp.instructionClocks = instructionClocks;
+    temp.instructionClocks += instructionClocks;
     temp.addressMode = addressMode;
     temp.A = A;
     temp.X = X;
@@ -41,6 +41,7 @@ void CPU::clock() {
         opcode = read(PC);
         call(lookup[opcode].AddressModeFunction);
         call(lookup[opcode].InstructionFunction);
+        instructionClocks = lookup[opcode].InstructionClocks;
     }
     else if (instructionClocks > 0) { // If executing function
         call(lookup[opcode].InstructionFunction);
@@ -103,7 +104,7 @@ void CPU::ABX() {
     finalData = read(address);
     finalAddress = address;
     if ((finalAddress >> 8) != high) { // If the high byte is changed after adding X
-        instructionClocks += 1;
+        instructionClocks = 1;
     }
 }
 void CPU::ABY() {
@@ -118,7 +119,7 @@ void CPU::ABY() {
     finalData = read(address);
     finalAddress = address;
     if ((finalData >> 8) != high) { // If the high byte is changed after adding X
-        instructionClocks += 1;
+        instructionClocks = 1;
     }
 }
 void CPU::IMM() {
@@ -178,8 +179,7 @@ void CPU::REL() {
     PC++;
     int8_t low = read(PC);
     finalAddress = PC + low;
-    instructionClocks++;
-    if ((finalAddress & 0xFF00) != (PC & 0xFF00)) instructionClocks++;
+    if ((finalAddress & 0xFF00) != (PC & 0xFF00)) instructionClocks = 2;
     PC++; // Increment PC later as there are dependencies
 }
 void CPU::ZPG() {
@@ -218,33 +218,6 @@ void CPU::AXX() {
 
 void CPU::ADC() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
-
         uint16_t temp = A + finalData + SR.C;
         A = temp & 0x00FF;
 
@@ -258,33 +231,6 @@ void CPU::ADC() {
 
 void CPU::AND() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
-
         uint16_t temp = A & finalData;
         A = temp & 0x00FF;
 
@@ -296,24 +242,6 @@ void CPU::AND() {
 
 void CPU::ASL() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case acc:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 5;
-                break;
-            case zpx:
-                instructionClocks = 6;
-                break;
-            case abl:
-                instructionClocks = 6;
-                break;
-            case abx:
-                instructionClocks = 7;
-                break;
-        }
-
         uint16_t temp;
         if (addressMode == acc) {
             temp = A << 1;
@@ -341,7 +269,6 @@ void CPU::BCC() {
             else instructionClocks += 2;
             PC = finalAddress;
         }
-        instructionClocks += 2;
     }
     instructionClocks--;
 }
@@ -353,7 +280,6 @@ void CPU::BCS() {
             else instructionClocks += 2;
             PC = finalAddress;
         }
-        instructionClocks += 2;
     }
     instructionClocks--;
 }
@@ -365,22 +291,12 @@ void CPU::BEQ() {
             else instructionClocks += 2;
             PC = finalAddress;
         }
-        instructionClocks += 2;
     }
     instructionClocks--;
 }
 
 void CPU::BIT() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-        };
-
         SR.N = finalData & 0x40;
         SR.V = finalData & 0x20;
         SR.Z = finalData & A;
@@ -396,8 +312,6 @@ void CPU::BMI() {
             PC = finalAddress;
             
         }
-        instructionClocks += 2;
-
     }
     instructionClocks--;
 }
@@ -409,7 +323,6 @@ void CPU::BNE() {
             else instructionClocks += 2;
             PC = finalAddress;
         }
-        instructionClocks += 2;
     }
     instructionClocks--;
 }
@@ -421,14 +334,12 @@ void CPU::BPL() {
             else instructionClocks += 2;
             PC = finalAddress;
         }
-        instructionClocks += 2;
     }
     instructionClocks--;
 }
 
 void CPU::BRK() { // TODO: Check brk instruction
     if (instructionClocks == 0) {
-        instructionClocks = 7;
         uint16_t temp = PC + 2;
         writeInQueue(0x0100 + SP, temp >> 8);
         SP--;
@@ -447,7 +358,6 @@ void CPU::BRK() { // TODO: Check brk instruction
 
 void CPU::BVC() {
     if (instructionClocks == 0) {
-        instructionClocks += 2;
         if (!SR.V) {
             if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
@@ -459,7 +369,6 @@ void CPU::BVC() {
 
 void CPU::BVS() {
     if (instructionClocks == 0) {
-        instructionClocks += 2;
         if (SR.V) {
             if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
@@ -471,7 +380,6 @@ void CPU::BVS() {
 
 void CPU::CLC() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         SR.C - 0;
     }
     instructionClocks --;
@@ -479,7 +387,6 @@ void CPU::CLC() {
 
 void CPU::CLD() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         SR.D = 0;
     }
     instructionClocks --;
@@ -487,7 +394,6 @@ void CPU::CLD() {
 
 void CPU::CLI() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         SR.I = 0;
     }
     instructionClocks--;
@@ -495,7 +401,6 @@ void CPU::CLI() {
 
 void CPU::CLV() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         SR.V= 0;
     }
     instructionClocks--;
@@ -503,33 +408,6 @@ void CPU::CLV() {
 
 void CPU::CMP() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
-
         if (A < finalData) {
             SR.N = (A-finalData) & 0x0100;
             SR.Z = 0;
@@ -551,18 +429,6 @@ void CPU::CMP() {
 
 void CPU::CPX() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-        }
-        
         if (X < finalData) {
             SR.N = (X-finalData) & 0x0100;
             SR.Z = 0;
@@ -584,18 +450,6 @@ void CPU::CPX() {
 
 void CPU::CPY() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-        }
-        
         if (Y < finalData) {
             SR.N = (Y-finalData) & 0x0100;
             SR.Z = 0;
@@ -617,21 +471,6 @@ void CPU::CPY() {
 
 void CPU::DEC() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case zpg:
-                instructionClocks == 5;
-                break;
-            case zpx:
-                instructionClocks == 6;
-                break;
-            case abl:
-                instructionClocks == 6;
-                break;
-            case abx:
-                instructionClocks == 7;
-                break;
-        }
-
         uint16_t temp = finalData - 1;
         writeInQueue(finalAddress, temp & 0x00FF);
         
@@ -668,33 +507,6 @@ void CPU::DEY() {
 
 void CPU::EOR() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5; 
-                break; 
-        }
-
         uint16_t temp = A ^ finalData;
         A = temp & 0x00FF;
 
@@ -706,21 +518,6 @@ void CPU::EOR() {
 
 void CPU::INC() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case zpg:
-                instructionClocks = 5;
-                break;
-            case zpx:
-                instructionClocks = 6;
-                break;
-            case abl:
-                instructionClocks = 6;
-                break;
-            case abx:
-                instructionClocks = 7;
-                break;
-        }
-
         uint16_t temp = finalData - 1;
         writeInQueue(finalAddress, temp & 0x00FF);
 
@@ -736,8 +533,6 @@ void CPU::INC() {
 
 void CPU::INX() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
-
         uint16_t temp = X + 1;
         X = temp & 0x00FF;
 
@@ -749,8 +544,6 @@ void CPU::INX() {
 
 void CPU::INY() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
-
         uint16_t temp = Y + 1;
         Y = temp & 0x00FF;
 
@@ -762,14 +555,6 @@ void CPU::INY() {
 
 void CPU::JMP() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case abl:
-                instructionClocks = 3;
-                break;
-            case ind:
-                instructionClocks = 5;
-                break;
-        }
         PC = finalAddress;
     }
     instructionClocks--;
@@ -777,8 +562,6 @@ void CPU::JMP() {
 
 void CPU::JSR() {
     if (instructionClocks == 0) {
-        instructionClocks = 6;
-
         writeInQueue(0x0100 + SP, PC >> 8);
         SP--;
         writeInQueue(0x0100 + SP, PC & 0x00FF);
@@ -793,32 +576,6 @@ void CPU::JSR() {
 
 void CPU::LDA() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
         A = finalData;
 
         SR.N = finalData & 0x80;
@@ -829,23 +586,6 @@ void CPU::LDA() {
 
 void CPU::LDX() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpy:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-        }
         X = finalData;
 
         SR.N = finalData & 0x80;
@@ -856,23 +596,6 @@ void CPU::LDX() {
 
 void CPU::LDY() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpy:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-        }
         Y = finalData;
 
         SR.N = finalData & 0x80;
@@ -883,23 +606,6 @@ void CPU::LDY() {
 
 void CPU::LSR() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case acc:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 5;
-                break;
-            case zpx:
-                instructionClocks = 6;
-                break;
-            case abl:
-                instructionClocks = 6;
-                break;
-            case abx:
-                instructionClocks = 7;
-                break;
-        }
         uint16_t temp = finalData >> 1;
 
         SR.N = 0;
@@ -911,40 +617,12 @@ void CPU::LSR() {
 
 void CPU::NOP() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
     }
     instructionClocks--;
 }
 
 void CPU::ORA() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
-
         uint16_t temp = A | finalData;
         A = temp & 0x00FF;
 
@@ -956,8 +634,6 @@ void CPU::ORA() {
 
 void CPU::PHA() {
     if (instructionClocks == 0) {
-        instructionClocks = 3;
-
         writeInQueue(0x0100 + SP, A);
         SP--;
     }
@@ -969,8 +645,6 @@ void CPU::PHA() {
 
 void CPU::PHP() {
     if (instructionClocks == 0) {
-        instructionClocks = 3;
-
         writeInQueue(0x0100 + SP, SR.byte);
         SP--;
     }
@@ -982,8 +656,6 @@ void CPU::PHP() {
 
 void CPU::PLA() {
     if (instructionClocks == 0) {
-        instructionClocks = 4;
-
         SP++;
         A = read(0x0100 + SP);
     }
@@ -992,8 +664,6 @@ void CPU::PLA() {
 
 void CPU::PLP() {
     if (instructionClocks == 0) {
-        instructionClocks = 4;
-
         SP++;
         uint8_t temp = read(0x0100 + SP);
         SR.N = temp & 0x80;
@@ -1009,23 +679,6 @@ void CPU::PLP() {
 
 void CPU::ROL() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case acc:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 5;
-                break;
-            case zpx:
-                instructionClocks = 6;
-                break;
-            case abl:
-                instructionClocks = 6;
-                break;
-            case abx:
-                instructionClocks = 7;
-                break;
-        }
         uint16_t temp = (finalData << 1) + SR.C;
         if (addressMode == acc) {
             A = temp & 0x00FF;
@@ -1044,23 +697,6 @@ void CPU::ROL() {
 
 void CPU::ROR() {
     if (instructionClocks == 0) {
-        switch (addressMode) {
-            case acc:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 5;
-                break;
-            case zpx:
-                instructionClocks = 6;
-                break;
-            case abl:
-                instructionClocks = 6;
-                break;
-            case abx:
-                instructionClocks = 7;
-                break;
-        }
         uint16_t temp = (SR.C >> 7) + (finalData >> 1);
 
         SR.C = finalData & 0x01;
@@ -1070,8 +706,6 @@ void CPU::ROR() {
 
 void CPU::RTI() {
     if (instructionClocks == 0) {
-        instructionClocks = 6;
-
         SP++;
         uint8_t temp = read(0x0100 + SP);
         SR.N = temp & 0x80;
@@ -1092,8 +726,6 @@ void CPU::RTI() {
 
 void CPU::RTS() {
     if (instructionClocks == 0) {
-        instructionClocks = 6;
-
         SP++;
         PC = read(0x0100 + SP);
         SP++;
@@ -1105,32 +737,6 @@ void CPU::RTS() {
 
 void CPU::SBC() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case imm:
-                instructionClocks = 2;
-                break;
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks += 4;
-                break;
-            case aby:
-                instructionClocks += 4;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks += 5;
-                break;
-        }
         uint16_t temp = A - finalData - SR.C;
         A = temp & 0x00FF;
 
@@ -1143,8 +749,6 @@ void CPU::SBC() {
 
 void CPU::SEC() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
-
         SR.C = 1;
     }
     instructionClocks--;
@@ -1152,8 +756,6 @@ void CPU::SEC() {
 
 void CPU::SED() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
-
         SR.D = 1;
     }
     instructionClocks--;
@@ -1161,8 +763,6 @@ void CPU::SED() {
 
 void CPU::SEI() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
-
         SR.I = 1;
     }
     instructionClocks--;
@@ -1170,29 +770,6 @@ void CPU::SEI() {
 
 void CPU::STA() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-            case abx:
-                instructionClocks = 5;
-                break;
-            case aby:
-                instructionClocks = 5;
-                break;
-            case xin:
-                instructionClocks = 6;
-                break;
-            case yin:
-                instructionClocks = 6;
-                break;
-        }
         writeInQueue(finalAddress, A);
     }
     instructionClocks--;
@@ -1203,17 +780,6 @@ void CPU::STA() {
 
 void CPU::STX() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpy:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-        }
         writeInQueue(finalAddress, X);
     }
     instructionClocks--;
@@ -1224,17 +790,6 @@ void CPU::STX() {
 
 void CPU::STY() {
     if (instructionClocks == 0) {
-        switch(addressMode) {
-            case zpg:
-                instructionClocks = 3;
-                break;
-            case zpx:
-                instructionClocks = 4;
-                break;
-            case abl:
-                instructionClocks = 4;
-                break;
-        }
         writeInQueue(finalAddress, Y);
     }
     instructionClocks--;
@@ -1245,7 +800,6 @@ void CPU::STY() {
 
 void CPU::TAX() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         X = A;
         SR.N = X & 0x80;
         SR.Z = !(X & 0xFF);
@@ -1255,7 +809,6 @@ void CPU::TAX() {
 
 void CPU::TAY() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         Y = A;
         SR.N = Y & 0x80;
         SR.Z = !(Y & 0xFF);
@@ -1265,7 +818,6 @@ void CPU::TAY() {
 
 void CPU::TSX() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         X = SP;
         SR.N = X & 0x80;
         SR.Z = !(X & 0xFF);
@@ -1275,7 +827,6 @@ void CPU::TSX() {
 
 void CPU::TXA() {
     if (instructionClocks == 0) {
-
         A = X;
         
         SR.N = X & 0x80;
@@ -1286,7 +837,6 @@ void CPU::TXA() {
 
 void CPU::TXS() {
     if (instructionClocks == 0) {
-        instructionClocks = 2;
         SP = X;
         SR.N = X & 0x80;
         SR.Z = !(X & 0xFF);
@@ -1296,7 +846,6 @@ void CPU::TXS() {
 
 void CPU::TYA() {
     if (instructionClocks == 0) {
-        instructionClocks - 2;
         A = Y;
         SR.N = X & 0x80;
         SR.Z = !(X & 0xFF);
