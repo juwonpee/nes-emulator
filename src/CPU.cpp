@@ -21,7 +21,7 @@ void CPU::reset() {
 CPUstatus CPU::dumpCPU() {
     CPUstatus temp;
     temp.opcode = lookup[opcode].Name;
-    temp.instructionClocks += instructionClocks;
+    temp.instructionClocks = instructionClocks;
     temp.addressMode = addressMode;
     temp.A = A;
     temp.X = X;
@@ -41,7 +41,7 @@ void CPU::clock() {
         opcode = read(PC);
         call(lookup[opcode].AddressModeFunction);
         call(lookup[opcode].InstructionFunction);
-        instructionClocks = lookup[opcode].InstructionClocks;
+        instructionClocks += lookup[opcode].InstructionClocks;
     }
     else if (instructionClocks > 0) { // If executing function
         call(lookup[opcode].InstructionFunction);
