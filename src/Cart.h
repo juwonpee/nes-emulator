@@ -1,8 +1,11 @@
-#include <types.h>
+#pragma once
+
+#include "types.h"
+#include "Mapper.h"
+
 #include <fstream>
 #include <string>
 #include <vector>
-#include <Mapper.h>
 
 using namespace std;
 
@@ -211,7 +214,7 @@ class Cart {
             union{
                 uint8_t input;
                 struct{
-                    uint8_t P:4;
+                    uint_8t P:4;
                     uint8_t M:4;
                 };
             };

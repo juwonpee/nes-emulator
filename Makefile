@@ -1,5 +1,5 @@
 CC = g++
-CC_INCLUDE = src/
+CC_INCLUDE = src/include/
 CCFLAGS = -pipe -O2
 CCFLAGS_DEBUG = -g -pipe -O0
 

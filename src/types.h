@@ -1,5 +1,4 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 #include <cstdint>
 #include <mutex>
@@ -72,5 +71,3 @@ typedef struct {
     uint16_t PC;
 } CPUstatus;
 
-
-#endif

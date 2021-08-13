@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <GUI.h>
+#include "GUI.h"
 
 using namespace std;
 using namespace sf;
