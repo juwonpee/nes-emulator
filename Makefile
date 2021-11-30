@@ -1,25 +1,25 @@
 CC = g++
-CC_INCLUDE = src/include/
-CCFLAGS = -pipe -O2
-CCFLAGS_DEBUG = -g -pipe -O0
+CC_INCLUDE = $(patsubst %, -I%, $(shell find src -type d))
+CC_FLAGS = -ggdb -pipe -O0
 
 LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
 
 SRC_DIR = src/
-OBJECT_DIR = build/object_files/
 OUTPUT = build/NES
-OUTPUT_DEBUG = build/NES
-MODULES_DIR = $(wildcard $(SRC_DIR)*.cpp)
-MODULES = $(notdir $(MODULES_DIR))
-OBJECTS = $(wildcard $(OBJECT_DIR)*.o)
+SOURCE = $(wildcard $(SRC_DIR)*.cpp) $(wildcard $(SRC_DIR)*/*.cpp)
+OBJECTS = $(SOURCE:.cpp=.o)
 
 
 
-all: $(MODULES)
-	$(CC) $(OBJECTS) -o $(OUTPUT_DEBUG) $(LIBARIES)
+all: $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(OUTPUT) $(LIBARIES)
+	find . -name "*.o" | xargs -r rm 
 
-%.cpp:
-	$(CC) $(CCFLAGS_DEBUG) -I$(CC_INCLUDE) -c $(SRC_DIR)$@ -o $(OBJECT_DIR)$(addsuffix .o,$(basename $@))
+%.o: %.cpp
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
 
 clear:
-	rm build/object_files/*
+	find . -name "*.o" | xargs -r rm 
+
+stuff:
+	echo $(SOURCE)t_files/*

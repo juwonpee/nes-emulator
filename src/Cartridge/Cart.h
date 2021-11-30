@@ -214,7 +214,7 @@ class Cart {
             union{
                 uint8_t input;
                 struct{
-                    uint_8t P:4;
+                    uint8_t P:4;
                     uint8_t M:4;
                 };
             };
