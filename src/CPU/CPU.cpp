@@ -194,7 +194,7 @@ void CPU::YIN() {
 void CPU::REL() {
     addressMode = rel;
     PC++;
-    int8_t low = read(PC);
+    int8_t low = read(PC); // Signed offset
     finalAddress = PC + low;
     if ((finalAddress & 0xFF00) != (PC & 0xFF00)) instructionClocks = 2;
     PC++; // Increment PC later as there are dependencies
@@ -282,7 +282,7 @@ void CPU::ASL() {
 void CPU::BCC() {
     if (instructionClocks == 0) {
         if (!SR.C) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
         }
@@ -293,7 +293,7 @@ void CPU::BCC() {
 void CPU::BCS() {
     if (instructionClocks == 0) {
         if (SR.C) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
         }
@@ -304,7 +304,7 @@ void CPU::BCS() {
 void CPU::BEQ() {
     if (instructionClocks == 0) {
         if (SR.Z) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
         }
@@ -324,7 +324,7 @@ void CPU::BIT() {
 void CPU::BMI() {
     if (instructionClocks == 0) {
         if (SR.N) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
             
@@ -336,7 +336,7 @@ void CPU::BMI() {
 void CPU::BNE() {
     if (instructionClocks == 0) {
         if (!SR.Z) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
         }
@@ -347,7 +347,7 @@ void CPU::BNE() {
 void CPU::BPL() {
     if (instructionClocks == 0) {
         if (!SR.N) {
-            if ((PC-1) & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
+            if (PC & 0xFF00 == finalAddress & 0xFF00) instructionClocks += 1;
             else instructionClocks += 2;
             PC = finalAddress;
         }
