@@ -34,7 +34,7 @@ Mapper::Mapper(
     mapper = mapperType;
     switch (mapperType) {                           
         case 0:
-            mapper000 = new Mapper000(_mirror, PRGROMData);
+            mapper000 = new Mapper000(_mirror, PRGROMData, CHRROMData);
             break;
         case 2:
             mapper002 = new Mapper002(_mirror, PRGROMData);

@@ -25,7 +25,8 @@ class Mapper000 {
     public:
         Mapper000(
             mirrorType _mirror,
-            vector<uint8_t> PRGROMData
+            vector<uint8_t> PRGROMData,
+            vector<uint8_t> CHRROMData
         );
         ~Mapper000();
 
@@ -38,5 +39,5 @@ class Mapper000 {
     private:
         uint8_t PRGROMSize;
         mirrorType mirror;
-        vector<uint8_t> PRGROM, CHRRAM;       
+        vector<uint8_t> PRGROM, CHRROM;       
 };

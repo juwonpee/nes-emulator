@@ -24,12 +24,10 @@
 using namespace std;
 
 typedef struct {
-    int x;
-    int y;
-    int r, g, b;
-} pixel_t;
+    uint8_t r, g, b;
+} pixel_colour_t;
 typedef struct {
-    queue<pixel_t> pixelQueue;
+    queue<pixel_colour_t> pixelQueue;
     mutex lock;
 } graphics_t;
 

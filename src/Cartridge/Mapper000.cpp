@@ -23,14 +23,16 @@ using namespace std;
 
 Mapper000::Mapper000(
     mirrorType _mirror,
-    vector<uint8_t> PRGROMData
+    vector<uint8_t> PRGROMData,
+    vector<uint8_t> CHRROMData
 )
 {
     cout << "Mapper000 init" << endl;
     mirror = _mirror;
     PRGROM = PRGROMData;
     PRGROMSize = PRGROM.size()/16384;
-    CHRRAM.reserve(8192);
+    CHRROM = CHRROMData;
+    CHRROM.reserve(8192);
 }
 
 Mapper000::~Mapper000() {
@@ -57,7 +59,7 @@ void Mapper000::CPUwrite(uint16_t address, uint8_t data) {
 
 uint8_t Mapper000::PPUread(uint16_t address) {
     if (address < 0x1000) {
-        return CHRRAM[address];
+        return CHRROM[address];
     }
     return 0;
 }
