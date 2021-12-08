@@ -150,7 +150,14 @@ void PPU::write(uint16_t address, uint8_t data) {
 			PPUSCROLL = data;
 			break;
 		case 0x2006:
-			PPUADDR = data;
+			if (!address_latch) {
+				address_buffer = (address_buffer & 0xFF00) | data;
+				address_latch = true;
+			}
+			else {
+				address_buffer = (address_buffer & 0x00FF) | (data << 8);
+				address_latch = false;
+			}
 			break;
 		case 0x2007:
 			PPUDATA = data;
@@ -175,4 +182,26 @@ uint8_t PPU::CPUread(uint16_t address) {
 
 void PPU::CPUwrite(uint16_t address, uint8_t data) {
 	bus->CPUwrite(address, data);
+}
+
+void PPU::getPatternTable(uint8_t pallete, uint8_t pixel) {
+	for (int p = 0; p < 2; p++) {	// Pattern table
+		for (int x = 0; x < 16; x++) {	// Tile X offset
+			for (int y = 0; y < 16; y++) {	// Tile Y offset
+				for (int i = 0; i < 8; i++) {	// Tile pixel x offset
+					for (int j = 0; j < 8; i++) {	// Tile pixel y offset
+						uint16_t offset = 0;
+						offset += x * 16 + y * 256 + j;
+						uint8_t pixel = (offset >> i) & 0x1;
+						pixel += ((offset + 8) >> i) &0x1;
+						pattern_table[p][x][y].pixel[i][j] = getColourFromPallete(pallete, pixel);
+					}
+				}
+			}
+		}
+	}
+}
+
+pixel_colour_t PPU::getColourFromPallete(uint8_t pallete, uint8_t pixel) {
+	return pixel_colour[PPUread(0x3F00 + (pallete << 2) + pixel) * 0x3F];
 }

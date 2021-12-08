@@ -138,12 +138,10 @@ typedef uint8_t PPUDATA_t;
 typedef uint8_t OAMDMA_t;
 
 
-// Pixel
-// typedef struct pixel_colour_t {
-// 	uint8_t r;
-//     uint8_t g;
-//     uint8_t b;
-// } pixel_colour_t;
+// sprite
+typedef struct sprite_t {
+	pixel_colour_t pixel[8][8];
+} sprite_t;
 
 class BUS;
 
@@ -173,12 +171,23 @@ class PPU {
 		OAMDMA_t OAMDMA;
 
 		uint32_t startUpClock = 0;
+		// 0: left (0x0000~0x0FFF), 1: right(0x1000~0x1FFF)
+		sprite_t pattern_table[2][16][16];
 
 	private: 
+		// convenience registers
+		bool address_latch;
+		uint8_t data_buffer;
+		uint16_t address_buffer;
+	
+		pixel_colour_t pixel_colour[0xFF];
+
+
 		uint8_t PPUread(uint16_t address);
 		void PPUwrite(uint16_t address, uint8_t data);
 		uint8_t CPUread(uint16_t address);
 		void CPUwrite(uint16_t address, uint8_t data);
-		pixel_colour_t pixel_colour[0xFF];
+		void getPatternTable(uint8_t pallete, uint8_t pixel);
+		pixel_colour_t getColourFromPallete(uint8_t pallete, uint8_t pixel);
 };
 
