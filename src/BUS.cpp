@@ -24,9 +24,9 @@ BUS::BUS(string _PRGROMdirectory, string _PRGRAMdirectory, graphics_t* graphics,
 	graphicsQueue = graphics;
 	inputQueue = input;
 	ram = new RAM();
-	nesCartridge = new Cart(_PRGROMdirectory, _PRGRAMdirectory);
+	nesCart = new Cart(_PRGROMdirectory, _PRGRAMdirectory);
 	nesCPU = new CPU(this);
-	nesPPU = new PPU();
+	nesPPU = new PPU(this);
 	// TODO: APU PPU classes here
 }
 
@@ -35,7 +35,7 @@ BUS::~BUS() {
 	delete inputQueue;
 
 	delete nesCPU;
-	delete nesCartridge;
+	delete nesCart;
 	delete ram;
 }
 
@@ -49,7 +49,7 @@ uint8_t BUS::CPUread(uint16_t _address) {
 		return CPUread(_address & 0x0800);
 	}
 	else if (_address < 0x2008) {
-		// TODO: PPU control registers
+		nesPPU->read(_address);
 	}
 	else if (_address < 0x4000) {
 
@@ -61,7 +61,7 @@ uint8_t BUS::CPUread(uint16_t _address) {
 		// NES test mode
 	}
 	else if (_address < 0xFFFF) {
-		return nesCartridge -> CPUread(_address);
+		return nesCart -> CPUread(_address);
 	}
 	return 0;
 }
@@ -76,7 +76,7 @@ void BUS::CPUwrite(uint16_t _address, uint8_t _data) {
 		ram -> write(_address & 0x0800, _data);
 	}
 	else if (_address < 0x2008) {
-		// TODO: PPU control registers
+		nesPPU->write(_address, _data);
 	}
 	else if (_address < 0x4000) {
 		// TODO: Mirror of 0x2000~0x2007
@@ -89,8 +89,16 @@ void BUS::CPUwrite(uint16_t _address, uint8_t _data) {
 		// NES test mode
 	}
 	else if (_address < 0xFFFF) {
-		nesCartridge -> CPUwrite(_address, _data);
+		nesCart -> CPUwrite(_address, _data);
 	}
+}
+
+uint8_t BUS::PPUread(uint16_t address) {
+	return nesCart->PPUread(address);
+}
+
+void BUS::PPUwrite(uint16_t address, uint8_t data) {
+	nesCart->PPUwrite(address, data);
 }
 
 void BUS::clock(uint64_t _clocks) {

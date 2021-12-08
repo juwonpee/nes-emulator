@@ -17,6 +17,7 @@
 #pragma once
 
 #include "types.h"
+#include "BUS.h"
 
 using namespace std;
 
@@ -144,12 +145,12 @@ typedef uint8_t OAMDMA_t;
 //     uint8_t b;
 // } pixel_colour_t;
 
-
+class BUS;
 
 
 class PPU {
 	public:
-	PPU();
+	PPU(BUS* b);
 	~PPU();
 
 	void clock();
@@ -158,6 +159,8 @@ class PPU {
 	void write(uint16_t address, uint8_t data);
 
 	private:
+		BUS* bus;
+
 		// Registers
 		PPUCTRL_t PPUCTRL;
 		PPUMASK_t PPUMASK;
@@ -172,6 +175,10 @@ class PPU {
 		uint32_t startUpClock = 0;
 
 	private: 
+		uint8_t PPUread(uint16_t address);
+		void PPUwrite(uint16_t address, uint8_t data);
+		uint8_t CPUread(uint16_t address);
+		void CPUwrite(uint16_t address, uint8_t data);
 		pixel_colour_t pixel_colour[0xFF];
 };
 

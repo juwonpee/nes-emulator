@@ -28,6 +28,10 @@
 
 using namespace std;
 
+class CPU;
+class PPU;
+class Cart;
+class RAM;
 
 class BUS {
 	public:
@@ -37,6 +41,8 @@ class BUS {
 
 		uint8_t CPUread(uint16_t _address);
 		void CPUwrite(uint16_t _address, uint8_t _data);
+		uint8_t PPUread(uint16_t address);
+		void PPUwrite(uint16_t address, uint8_t data);
 
 		void write(pixel_colour_t _pixel);
 		
@@ -57,7 +63,7 @@ class BUS {
 		string PRGRAMdirectory;
 		CPU* nesCPU;
 		PPU* nesPPU;
-		Cart* nesCartridge;
+		Cart* nesCart;
 		RAM* ram;
 
 		void runSingleClock();

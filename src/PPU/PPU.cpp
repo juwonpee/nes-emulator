@@ -18,7 +18,9 @@
 
 using namespace std;
 
-PPU::PPU() {
+PPU::PPU(BUS* b) {
+	bus = b;
+
 	// Init registers 
 	PPUCTRL.data = 0;
 	PPUMASK.data = 0;
@@ -157,4 +159,20 @@ void PPU::write(uint16_t address, uint8_t data) {
 			OAMDMA = data;
 			break;
 	};
+}
+
+uint8_t PPU::PPUread(uint16_t address) {
+	return bus->PPUread(address);
+}
+
+void PPU::PPUwrite(uint16_t address, uint8_t data) {
+	bus->PPUwrite(address, data);
+}
+
+uint8_t PPU::CPUread(uint16_t address) {
+	return bus->CPUread(address);
+}
+
+void PPU::CPUwrite(uint16_t address, uint8_t data) {
+	bus->CPUwrite(address, data);
 }
