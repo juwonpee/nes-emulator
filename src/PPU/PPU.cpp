@@ -116,19 +116,22 @@ void PPU::clock() {
 }
 
 uint8_t PPU::read(uint16_t address) {
+	uint8_t returnInt;
 	switch (address) {
 		case 0x2002:
-			return PPUSTATUS.data;
-			break;
+			address_latch = 0;
+			// Clear bit 7
+			returnInt = PPUSTATUS.data;
+			PPUSTATUS.data &= 0x8F;
+
+			return returnInt;
 		case 0x2004:
 			return OAMDATA;
-			break;
 		case 0x2007:
+			PPUDATA = PPUread(address_buffer);
 			return PPUDATA;
-			break;
 		default:
 			return 0;
-			break;
 	};
 }
 
@@ -147,6 +150,14 @@ void PPU::write(uint16_t address, uint8_t data) {
 			OAMDATA = data;
 			break;
 		case 0x2005:
+			if (!scroll_buffer) {
+				scroll_buffer = (scroll_buffer & 0xFF00) + data;
+				scroll_latch = true;
+			}
+			else {
+				scroll_buffer = (scroll_buffer & 0x00FF) + data;
+				scroll_latch = false;
+			}
 			PPUSCROLL = data;
 			break;
 		case 0x2006:
@@ -158,9 +169,11 @@ void PPU::write(uint16_t address, uint8_t data) {
 				address_buffer = (address_buffer & 0x00FF) | (data << 8);
 				address_latch = false;
 			}
+			PPUADDR = data;
 			break;
 		case 0x2007:
 			PPUDATA = data;
+			PPUwrite(address_buffer, data);
 			break;
 		case 0x4014:
 			OAMDMA = data;
