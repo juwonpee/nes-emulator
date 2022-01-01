@@ -19,7 +19,8 @@
 #include <cstdint>
 #include <mutex>
 #include <queue>
-#include <string>
+#include <cstring>
+#include <cstdlib>
 
 using namespace std;
 

@@ -177,8 +177,11 @@ class PPU {
 	private: 
 		// convenience registers
 		bool address_latch;
-		uint8_t data_buffer;
 		uint16_t address_buffer;
+		bool scroll_latch;
+		uint16_t scroll_buffer;
+
+	
 	
 		pixel_colour_t pixel_colour[0xFF];
 
