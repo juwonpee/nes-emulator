@@ -17,7 +17,10 @@
 #pragma once
 
 #include <types.h>
-#include <SFML/Graphics.hpp>
+#include <thread.h>
+#include "graphicsEngine.h"
+
+using namespace GraphicsEngine;
 
 
 class GUI {
@@ -25,8 +28,9 @@ class GUI {
         GUI();
         ~GUI();
 
-
     private:
-        sf::RenderWindow* window;
+        dataShare_t dataShare;
+
+        graphicsEngine* graphics;
 
 }; 

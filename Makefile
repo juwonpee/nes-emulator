@@ -20,6 +20,3 @@ all: $(OBJECTS)
 
 clear:
 	find . -name "*.o" | xargs -r rm 
-
-stuff:
-	echo $(SOURCE)t_files/*
