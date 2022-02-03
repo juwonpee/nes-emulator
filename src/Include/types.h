@@ -77,6 +77,8 @@ enum addressingMode {
 // Structs used for debugging
 typedef struct {
     string opcode;
+    uint8_t operandLow, operandHigh;
+    uint16_t finalData, finalAddress;
     uint8_t instructionClocks;
     addressingMode addressMode;
     uint8_t A;

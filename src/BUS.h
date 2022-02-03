@@ -19,6 +19,8 @@
 #include <string>
 #include <chrono>
 #include <iostream>
+#include <fstream>
+#include <iomanip>
 
 #include "types.h"
 #include "CPU.h"
@@ -58,6 +60,7 @@ class BUS {
 
 		uint16_t address;
 		uint8_t data;
+
 
 		string PRGROMdirectory;
 		string PRGRAMdirectory;

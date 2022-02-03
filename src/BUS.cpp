@@ -126,10 +126,96 @@ void BUS::clock(uint64_t _clocks) {
 }
 
 void BUS::dumpCPU() {
-	cout << "CPU registers" << endl;
 	CPUstatus temp = nesCPU -> dumpCPU();
+
+	ofstream log;
+	if (temp.instructionClocks == 0) {
+		log.open("Debug log.txt", ios::out | ios::trunc);
+		log << hex << setw(6) << left << temp.PC;
+		log << setw(4) << left << temp.opcode;
+		switch(temp.addressMode) {
+			case acc:
+				log << setw(4) << left << temp.opcode;
+				break;
+			case abl:
+				log << setw(7) << left << temp.operandHigh << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.operandLow << temp.operandHigh;
+				break;
+			case abx:
+				log << setw(7) << left << temp.operandHigh << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case aby:
+				log << setw(7) << left << temp.operandHigh << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case imm:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << (uint8_t)temp.finalData;
+				break;
+			case imp:
+				log << setw(7) << left << "";
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "";
+				break;
+			case ind:
+				log << setw(7) << left << temp.operandHigh << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case xin:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case yin:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case rel:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case zpg:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case zpx:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case zpy:
+				log << setw(7) << left << temp.operandLow;
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "$" << temp.finalAddress;
+				break;
+			case axx:
+				log << setw(7) << left << "";
+				log << setw(4) << left << temp.opcode;
+				log << setw(7) << left << "";
+				break;
+		};
+
+		log << setw(4) << left << "A:" << temp.A;
+		log << setw(4) << left << "X:" << temp.X;
+		log << setw(4) << left << "Y:" << temp.Y;
+		log << setw(5) << left << "SP:" << temp.SP;
+		log << setw(5) << left << "SR:" << temp.SR.byte << endl;
+	}
+	
+
+
+
+	cout << "CPU registers" << endl;
 	cout << "opcode : " << temp.opcode << endl;
-	cout << "Instruction Clocks : " << hex << (uint16_t)temp.instructionClocks << endl;
 	cout << "Instruction Mode : ";
 	switch (temp.addressMode) {
 		case acc:
@@ -160,21 +246,28 @@ void BUS::dumpCPU() {
 			cout << "yin" << endl;
 			break;
 		case rel:
+			cout << "Operands: " << temp.operandLow << endl;
 			cout << "rel" << endl;
 			break;
 		case zpg:
+			cout << "Operands: " << temp.operandLow << endl;
 			cout << "zpg" << endl;
 			break;
 		case zpx:
+			cout << "Operands: " << temp.operandLow << endl;
 			cout << "zpx" << endl;
 			break;
 		case zpy:
+			cout << "Operands: " << temp.operandLow << endl;
 			cout << "zpy" << endl;
 			break;
 		case axx:
+			cout << "Operands: " << temp.operandLow << endl;
 			cout << "axx" << endl;
 			break;
 	}
+	cout << "Instruction Clocks : " << hex << (uint16_t)temp.instructionClocks << endl;
+	
 	cout << "A   : " << hex << (uint16_t)temp.A << endl;
 	cout << "X   : " << hex << (uint16_t)temp.X << endl;
 	cout << "Y   : " << hex << (uint16_t)temp.Y << endl;

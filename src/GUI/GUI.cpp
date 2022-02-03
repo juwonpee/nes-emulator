@@ -21,7 +21,7 @@ using namespace std;
 
 GUI::GUI() {
     dataShare.lock.unlock();
-    thread* graphics = new thread(graphicsThread);
+    // thread* graphics = new thread(graphicsThread);
 }
 
 GUI::~GUI() {

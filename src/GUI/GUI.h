@@ -17,7 +17,7 @@
 #pragma once
 
 #include <types.h>
-#include <thread.h>
+#include <thread>
 #include "graphicsEngine.h"
 
 using namespace GraphicsEngine;

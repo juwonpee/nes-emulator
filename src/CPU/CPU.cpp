@@ -38,6 +38,10 @@ void CPU::reset() {
 CPUstatus CPU::dumpCPU() {
     CPUstatus temp;
     temp.opcode = lookup[opcode].Name;
+    temp.operandLow = operandLow;
+    temp.operandHigh = operandHigh;
+    temp.finalData = finalData;
+    temp.finalAddress = finalAddress;
     temp.instructionClocks = instructionClocks;
     temp.addressMode = addressMode;
     temp.A = A;
@@ -108,6 +112,10 @@ void CPU::ABS() {
     PC++;
     uint16_t address = low + (high << 8);
     finalData = read(address);
+    
+    operandLow = low;
+    operandHigh = high;
+
 }
 void CPU::ABX() {
     addressMode = abx;
@@ -123,6 +131,9 @@ void CPU::ABX() {
     if ((finalAddress >> 8) != high) { // If the high byte is changed after adding X
         instructionClocks = 1;
     }
+
+    operandLow = low;
+    operandHigh = high;
 }
 void CPU::ABY() {
     addressMode = aby;
@@ -138,6 +149,9 @@ void CPU::ABY() {
     if ((finalData >> 8) != high) { // If the high byte is changed after adding X
         instructionClocks = 1;
     }
+    
+    operandLow = low;
+    operandHigh = high;
 }
 void CPU::IMM() {
     addressMode = imm;
@@ -163,6 +177,9 @@ void CPU::IND() {
     address = low + (high << 8); // Get value of pointer
     finalData = read(address);
     finalAddress = address;
+    
+    operandLow = low;
+    operandHigh = high;
 }
 void CPU::XIN() {
     addressMode = xin;
@@ -174,6 +191,9 @@ void CPU::XIN() {
     uint16_t address = low + (high << 8);
     finalData = read(address);
     finalAddress = address;
+    
+    operandLow = low - X;
+    operandHigh = high - X;
 }
 void CPU::YIN() {
     addressMode = yin;
@@ -190,6 +210,9 @@ void CPU::YIN() {
     // if ((address & 0xFF00) == (high << 8)) { // If page changes
     //     instructionClocks += 1;
     // }
+    
+    operandLow = low;
+    operandHigh = high;
 }
 void CPU::REL() {
     addressMode = rel;
@@ -198,6 +221,9 @@ void CPU::REL() {
     finalAddress = PC + low;
     if ((finalAddress & 0xFF00) != (PC & 0xFF00)) instructionClocks = 2;
     PC++; // Increment PC later as there are dependencies
+
+    operandLow = low;
+    operandHigh = 0;
 }
 void CPU::ZPG() {
     addressMode = zpg;
@@ -207,6 +233,9 @@ void CPU::ZPG() {
     uint8_t high = 0x00;
     uint8_t address = low + (high << 8);
     finalData = read(address);
+
+    operandLow = low;
+    operandHigh = 0;
 }
 void CPU::ZPX() {
     addressMode = zpx;
@@ -217,6 +246,9 @@ void CPU::ZPX() {
     uint8_t address = low + (high << 8);
     address += X;
     finalData = read(address);
+    
+    operandLow = low;
+    operandHigh = 0;
 }
 void CPU::ZPY() {
     addressMode = zpy;
@@ -227,6 +259,9 @@ void CPU::ZPY() {
     uint8_t address = low + (high << 8);
     address += Y;
     finalData = read(address);
+    
+    operandLow = low;
+    operandHigh = 0;
 }
 void CPU::AXX() {
     addressMode = axx;
