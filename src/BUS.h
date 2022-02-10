@@ -69,5 +69,8 @@ class BUS {
 		Cart* nesCart;
 		RAM* ram;
 
+		// Debug stuffs
+		ofstream log;
+
 		void runSingleClock();
 };

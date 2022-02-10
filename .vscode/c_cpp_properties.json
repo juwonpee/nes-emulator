@@ -7,6 +7,7 @@
                 "${workspaceFolder}/*",
                 "/usr/local/include/**"
             ],
+            
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cppStandard": "gnu++20"

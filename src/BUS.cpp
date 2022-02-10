@@ -28,6 +28,9 @@ BUS::BUS(string _PRGROMdirectory, string _PRGRAMdirectory, graphics_t* graphics,
 	nesCPU = new CPU(this);
 	nesPPU = new PPU(this);
 	// TODO: APU PPU classes here
+
+	// Debug stuffs
+	log.open("Debug log.txt", ios::out | ios::trunc);
 }
 
 BUS::~BUS() {
@@ -37,6 +40,8 @@ BUS::~BUS() {
 	delete nesCPU;
 	delete nesCart;
 	delete ram;
+	
+	log.close();
 }
 
 uint8_t BUS::CPUread(uint16_t _address) {
@@ -126,161 +131,162 @@ void BUS::clock(uint64_t _clocks) {
 }
 
 void BUS::dumpCPU() {
+
 	CPUstatus temp = nesCPU -> dumpCPU();
 
-	ofstream log;
+	ostringstream tempString;
 	if (temp.instructionClocks == 0) {
-		log.open("Debug log.txt", ios::out | ios::trunc);
-		log << hex << setw(6) << left << temp.PC;
-		log << setw(4) << left << temp.opcode;
+		tempString << hex << setw(6) << left << temp.PC;
+		tempString << hex << setw(8) << left << temp.opcode;
 		switch(temp.addressMode) {
 			case acc:
-				log << setw(4) << left << temp.opcode;
+				tempString << hex << setw(18) << left << temp.opcode;
 				break;
 			case abl:
-				log << setw(7) << left << temp.operandHigh << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.operandLow << temp.operandHigh;
+				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.operandLow << temp.operandHigh;
 				break;
 			case abx:
-				log << setw(7) << left << temp.operandHigh << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case aby:
-				log << setw(7) << left << temp.operandHigh << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case imm:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << (uint8_t)temp.finalData;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << (uint8_t)temp.finalData;
 				break;
 			case imp:
-				log << setw(7) << left << "";
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "";
+				tempString << hex << setw(7) << left << "";
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "";
 				break;
 			case ind:
-				log << setw(7) << left << temp.operandHigh << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case xin:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case yin:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case rel:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpg:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpx:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpy:
-				log << setw(7) << left << temp.operandLow;
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "$" << temp.finalAddress;
+				tempString << hex << setw(7) << left << temp.operandLow;
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case axx:
-				log << setw(7) << left << "";
-				log << setw(4) << left << temp.opcode;
-				log << setw(7) << left << "";
+				tempString << hex << setw(7) << left << "";
+				tempString << hex << setw(4) << left << temp.opcode;
+				tempString << hex << setw(7) << left << "";
 				break;
 		};
 
-		log << setw(4) << left << "A:" << temp.A;
-		log << setw(4) << left << "X:" << temp.X;
-		log << setw(4) << left << "Y:" << temp.Y;
-		log << setw(5) << left << "SP:" << temp.SP;
-		log << setw(5) << left << "SR:" << temp.SR.byte << endl;
+		tempString << hex << setw(4) << left << "A:" << temp.A;
+		tempString << hex << setw(4) << left << "X:" << temp.X;
+		tempString << hex << setw(4) << left << "Y:" << temp.Y;
+		tempString << hex << setw(5) << left << "SP:" << temp.SP;
+		tempString << hex << setw(5) << left << "SR:" << temp.SR.byte;
+		tempString << endl;
+		
+
+		// write to file
+		log << tempString.str();
+		// log.close();
+
+		// Output to terminal
+		cout << tempString.str();
 	}
+
+	// cout << "CPU registers" << endl;
+	// cout << "opcode : " << temp.opcode << endl;
+	// cout << "Instruction Mode : ";
+	// switch (temp.addressMode) {
+	// 	case acc:
+	// 		cout << "acc" << endl;
+	// 		break;
+	// 	case abl:
+	// 		cout << "abl" << endl;
+	// 		break;
+	// 	case abx:
+	// 		cout << "abx" << endl;
+	// 		break;
+	// 	case aby:
+	// 		cout << "aby" << endl;
+	// 		break;
+	// 	case imm:
+	// 		cout << "imm" << endl;
+	// 		break;
+	// 	case imp:
+	// 		cout << "imp" << endl;
+	// 		break;
+	// 	case ind:
+	// 		cout << "ind" << endl;
+	// 		break;
+	// 	case xin:
+	// 		cout << "xin" << endl;
+	// 		break;
+	// 	case yin:
+	// 		cout << "yin" << endl;
+	// 		break;
+	// 	case rel:
+	// 		cout << "rel" << endl;
+	// 		break;
+	// 	case zpg:
+	// 		cout << "zpg" << endl;
+	// 		break;
+	// 	case zpx:
+	// 		cout << "zpx" << endl;
+	// 		break;
+	// 	case zpy:
+	// 		cout << "zpy" << endl;
+	// 		break;
+	// 	case axx:
+	// 		cout << "axx" << endl;
+	// 		break;
+	// }
+	// cout << "Instruction Clocks : " << hex << (uint16_t)temp.instructionClocks << endl;
 	
-
-
-
-	cout << "CPU registers" << endl;
-	cout << "opcode : " << temp.opcode << endl;
-	cout << "Instruction Mode : ";
-	switch (temp.addressMode) {
-		case acc:
-			cout << "acc" << endl;
-			break;
-		case abl:
-			cout << "abl" << endl;
-			break;
-		case abx:
-			cout << "abx" << endl;
-			break;
-		case aby:
-			cout << "aby" << endl;
-			break;
-		case imm:
-			cout << "imm" << endl;
-			break;
-		case imp:
-			cout << "imp" << endl;
-			break;
-		case ind:
-			cout << "ind" << endl;
-			break;
-		case xin:
-			cout << "xin" << endl;
-			break;
-		case yin:
-			cout << "yin" << endl;
-			break;
-		case rel:
-			cout << "Operands: " << temp.operandLow << endl;
-			cout << "rel" << endl;
-			break;
-		case zpg:
-			cout << "Operands: " << temp.operandLow << endl;
-			cout << "zpg" << endl;
-			break;
-		case zpx:
-			cout << "Operands: " << temp.operandLow << endl;
-			cout << "zpx" << endl;
-			break;
-		case zpy:
-			cout << "Operands: " << temp.operandLow << endl;
-			cout << "zpy" << endl;
-			break;
-		case axx:
-			cout << "Operands: " << temp.operandLow << endl;
-			cout << "axx" << endl;
-			break;
-	}
-	cout << "Instruction Clocks : " << hex << (uint16_t)temp.instructionClocks << endl;
-	
-	cout << "A   : " << hex << (uint16_t)temp.A << endl;
-	cout << "X   : " << hex << (uint16_t)temp.X << endl;
-	cout << "Y   : " << hex << (uint16_t)temp.Y << endl;
-	cout << "SP  : " << hex << (uint16_t)temp.SP << endl;
-	cout << "PC  : " << hex << temp.PC << endl;
-	cout << "SR  : " << hex << (uint16_t)temp.SR.byte << endl;
-	cout << "Status Registers" << endl;
-	cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
-	cout << "Zero      : " << hex << (uint16_t)temp.SR.Z << endl;
-	cout << "Interrupt : " << hex << (uint16_t)temp.SR.I << endl;
-	cout << "Decimal   : " << hex << (uint16_t)temp.SR.D << endl;
-	cout << "Break     : " << hex << (uint16_t)temp.SR.B << endl;
-	cout << "Ignore    : " << hex << (uint16_t)temp.SR.ignore << endl;
-	cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
-	cout << "Negative  : " << hex << (uint16_t)temp.SR.N << endl << endl;
+	// cout << "A   : " << hex << (uint16_t)temp.A << endl;
+	// cout << "X   : " << hex << (uint16_t)temp.X << endl;
+	// cout << "Y   : " << hex << (uint16_t)temp.Y << endl;
+	// cout << "SP  : " << hex << (uint16_t)temp.SP << endl;
+	// cout << "PC  : " << hex << temp.PC << endl;
+	// cout << "SR  : " << hex << (uint16_t)temp.SR.byte << endl;
+	// cout << "Status Registers" << endl;
+	// cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
+	// cout << "Zero      : " << hex << (uint16_t)temp.SR.Z << endl;
+	// cout << "Interrupt : " << hex << (uint16_t)temp.SR.I << endl;
+	// cout << "Decimal   : " << hex << (uint16_t)temp.SR.D << endl;
+	// cout << "Break     : " << hex << (uint16_t)temp.SR.B << endl;
+	// cout << "Ignore    : " << hex << (uint16_t)temp.SR.ignore << endl;
+	// cout << "Carry     : " << hex << (uint16_t)temp.SR.C << endl;
+	// cout << "Negative  : " << hex << (uint16_t)temp.SR.N << endl << endl;
 }
