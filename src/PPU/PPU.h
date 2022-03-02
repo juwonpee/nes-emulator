@@ -137,6 +137,11 @@ typedef uint8_t PPUDATA_t;
 // OAM DMA register (high byte)
 typedef uint8_t OAMDMA_t;
 
+// Convenience types
+typedef enum tile_type_t {
+	background, foreground
+} tile_type_t;
+
 
 // sprite
 typedef struct sprite_t {
@@ -155,9 +160,13 @@ class PPU {
 
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t data);
+	void clock();
 
 	private:
 		BUS* bus;
+
+		// From Cart class
+		bool mirrorType;
 
 		// Registers
 		PPUCTRL_t PPUCTRL;
@@ -170,11 +179,18 @@ class PPU {
 		PPUDATA_t PPUDATA;
 		OAMDMA_t OAMDMA;
 
+		// VRAM regions
+		uint8_t nameTable[0x1000];
+		uint8_t pallete_table[0x20];
+
 		uint32_t startUpClock = 0;
 		// 0: left (0x0000~0x0FFF), 1: right(0x1000~0x1FFF)
 		sprite_t pattern_table[2][16][16];
 
-	private: 
+
+		// Convenience variables
+		int scanline, cycle = 0;
+
 		// convenience registers
 		bool address_latch;
 		uint16_t address_buffer;
@@ -182,15 +198,16 @@ class PPU {
 		uint16_t scroll_buffer;
 
 	
-	
 		pixel_colour_t pixel_colour[0xFF];
 
+		// Convenience tables
+		sprite_t patternTableColourAdjusted[2][16][16];
 
 		uint8_t PPUread(uint16_t address);
 		void PPUwrite(uint16_t address, uint8_t data);
 		uint8_t CPUread(uint16_t address);
 		void CPUwrite(uint16_t address, uint8_t data);
-		void getPatternTable(uint8_t pallete, uint8_t pixel);
+		void getPatternTable(tile_type_t type, uint8_t pallete);
 		pixel_colour_t getColourFromPallete(uint8_t pallete, uint8_t pixel);
 };
 

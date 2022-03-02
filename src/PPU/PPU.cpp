@@ -100,6 +100,8 @@ PPU::PPU(BUS* b) {
 	pixel_colour[0x3D].r = 160;	pixel_colour[0x3D].g = 162;	pixel_colour[0x3D].b = 160;
 	pixel_colour[0x3E].r = 0;	pixel_colour[0x3E].g = 0;	pixel_colour[0x3E].b = 0;
 	pixel_colour[0x3F].r = 0;	pixel_colour[0x3F].g = 0;	pixel_colour[0x3F].b = 0;
+
+	
 }
 
 PPU::~PPU() {
@@ -122,17 +124,17 @@ uint8_t PPU::read(uint16_t address) {
 			address_latch = 0;
 			// Clear bit 7
 			returnInt = PPUSTATUS.data;
-			PPUSTATUS.data &= 0x8F;
+			PPUSTATUS.vertical_blank = 0;
 
 			return returnInt;
 		case 0x2004:
 			return OAMDATA;
 		case 0x2007:
 			PPUDATA = PPUread(address_buffer);
+			address_buffer++;																	// Auto increment
 			return PPUDATA;
-		default:
-			return 0;
 	};
+	return 0;
 }
 
 void PPU::write(uint16_t address, uint8_t data) {
@@ -151,7 +153,7 @@ void PPU::write(uint16_t address, uint8_t data) {
 			break;
 		case 0x2005:
 			if (!scroll_buffer) {
-				scroll_buffer = (scroll_buffer & 0xFF00) + data;
+				scroll_buffer = data;
 				scroll_latch = true;
 			}
 			else {
@@ -162,11 +164,11 @@ void PPU::write(uint16_t address, uint8_t data) {
 			break;
 		case 0x2006:
 			if (!address_latch) {
-				address_buffer = (address_buffer & 0xFF00) | data;
+				address_buffer = data << 8;
 				address_latch = true;
 			}
 			else {
-				address_buffer = (address_buffer & 0x00FF) | (data << 8);
+				address_buffer = (address_buffer & 0xFF00) + data;
 				address_latch = false;
 			}
 			PPUADDR = data;
@@ -174,6 +176,7 @@ void PPU::write(uint16_t address, uint8_t data) {
 		case 0x2007:
 			PPUDATA = data;
 			PPUwrite(address_buffer, data);
+			address_buffer++;																	// Auto increment
 			break;
 		case 0x4014:
 			OAMDMA = data;
@@ -181,12 +184,71 @@ void PPU::write(uint16_t address, uint8_t data) {
 	};
 }
 
+void PPU::clock() {
+	if (scanline == -1 && cycle == -1) {
+		PPUSTATUS.vertical_blank = 0;
+	}
+	if (scanline == 241 && cycle == 1) {
+		PPUSTATUS.vertical_blank = 1;
+		if (PPUCTRL.NMI_generate_time) {
+			bus->
+		}
+	}
+}
+
 uint8_t PPU::PPUread(uint16_t address) {
-	return bus->PPUread(address);
+	if (address < 0x2000) {
+		return bus->PPUread(address);
+	}
+	else if (address < 0x2400) {
+		return nameTable[address - 0x2000]; 
+	}
+	else if (address < 0x2800) {
+		if (mirrorType == false) {address -= 0x400;}											// Horizontal mirroring
+		// No mirroring required for vertical
+		return nameTable[address - 0x2000];
+	}
+	else if (address < 0x2C00) {
+		if (mirrorType == false) {}																// No mirroring required for horizontal 
+		else {address -= 0x800;}
+		return nameTable[address - 0x2000];
+	}
+	else if (address < 0x3000) {
+		if (mirrorType == false) {address -= 0x400;}
+		else {address -= 0x800;}
+		return nameTable[address - 0x2000];
+	}
+	else if (address < 0x4000) {
+		return pallete_table[address & 0x1F];
+	}
+	return 0;
 }
 
 void PPU::PPUwrite(uint16_t address, uint8_t data) {
-	bus->PPUwrite(address, data);
+	if (address < 0x2000) {																		// Write to this address space in case cartridge uses CHR-RAM
+		bus->PPUwrite(address, data);
+	}
+	else if (address < 0x2400) {
+		nameTable[address - 0x2000] = data; 
+	}
+	else if (address < 0x2800) {
+		if (mirrorType == false) {address -= 0x400;}											// Horizontal mirroring
+		// No mirroring required for vertical
+		nameTable[address - 0x2000] = data; 
+	}
+	else if (address < 0x2C00) {
+		if (mirrorType == false) {}																// No mirroring required for horizontal 
+		else {address -= 0x800;}
+		nameTable[address - 0x2000] = data; 
+	}
+	else if (address < 0x3000) {
+		if (mirrorType == false) {address -= 0x400;}
+		else {address -= 0x800;}
+		nameTable[address - 0x2000] = data; 
+	}
+	else if (address < 0x4000) {
+		pallete_table[address & 0x1F] = data;
+	}
 }
 
 uint8_t PPU::CPUread(uint16_t address) {
@@ -197,18 +259,31 @@ void PPU::CPUwrite(uint16_t address, uint8_t data) {
 	bus->CPUwrite(address, data);
 }
 
-void PPU::getPatternTable(uint8_t pallete, uint8_t pixel) {
-	for (int p = 0; p < 2; p++) {	// Pattern table
-		for (int x = 0; x < 16; x++) {	// Tile X offset
-			for (int y = 0; y < 16; y++) {	// Tile Y offset
-				for (int i = 0; i < 8; i++) {	// Tile pixel x offset
-					for (int j = 0; j < 8; i++) {	// Tile pixel y offset
-						uint16_t offset = 0;
-						offset += x * 16 + y * 256 + j;
-						uint8_t pixel = (offset >> i) & 0x1;
-						pixel += ((offset + 8) >> i) &0x1;
-						pattern_table[p][x][y].pixel[i][j] = getColourFromPallete(pallete, pixel);
-					}
+void PPU::getPatternTable(tile_type_t type, uint8_t pallete) {
+
+	uint16_t memoryOffset;
+	uint8_t patternTableOffset;
+	if (type == background) {
+		memoryOffset = 0; patternTableOffset = 0;
+	}
+	else if (type == foreground) {
+		memoryOffset = 0x1000; patternTableOffset = 1;
+	}
+
+	for (int yTileOffset = 0; yTileOffset < 16; yTileOffset++) {	// Tile X offset
+		for (int xTileOffset = 0; xTileOffset < 16; xTileOffset++) {	// Tile Y offset
+			// Tile byte offset
+			uint16_t offset = yTileOffset * 256 + xTileOffset * 16;
+
+			for (uint8_t row = 0; row < 8; row++) {
+				uint8_t tile_lsb = PPUread(memoryOffset + offset + row);
+				uint8_t tile_msb = PPUread(memoryOffset + offset + row + 8);
+
+				for (uint8_t column = 0; column < 8; column++) {
+					uint8_t pixel = (tile_lsb & 0x1) + 2 * (tile_msb & 0x1);
+					tile_lsb >>= 1; tile_msb >>= 1;
+
+					patternTableColourAdjusted[patternTableOffset][yTileOffset][xTileOffset].pixel[row][column] = getColourFromPallete(pallete, pixel);
 				}
 			}
 		}
@@ -216,5 +291,5 @@ void PPU::getPatternTable(uint8_t pallete, uint8_t pixel) {
 }
 
 pixel_colour_t PPU::getColourFromPallete(uint8_t pallete, uint8_t pixel) {
-	return pixel_colour[PPUread(0x3F00 + (pallete << 2) + pixel) * 0x3F];
+	return pixel_colour[PPUread(0x3F00 + (pallete << 2) + pixel)];
 }

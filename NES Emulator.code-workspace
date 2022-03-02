@@ -67,6 +67,6 @@
 		"C_Cpp.default.cStandard": "gnu17",
 		"C_Cpp.default.systemIncludePath": [],
 		"C_Cpp.default.compilerPath": "",
-		"C_Cpp.default.intelliSenseMode": "linux-gcc-arm64"
+		"C_Cpp.default.intelliSenseMode": "linux-gcc-x64"
 	},
 }

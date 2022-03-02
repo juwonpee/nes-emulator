@@ -79,22 +79,22 @@ uint8_t Cart::CPUread(uint16_t address) {
 }
 
 void Cart::CPUwrite(uint16_t address, uint8_t data) {
-    return mapper -> CPUwrite(address, data);
+    mapper -> CPUwrite(address, data);
 }
 
 uint8_t Cart::PPUread(uint16_t address) {
-    return mapper -> CPUread(address);
+    return mapper -> PPUread(address);
 }
 
 void Cart::PPUwrite(uint16_t address, uint8_t data) {
-    return mapper -> CPUwrite(address, data);
+    mapper -> PPUwrite(address, data);
 }
 
 Cart::~Cart() {
     delete buffer;
     delete mapper;
 }
-
+ 
 void Cart::iNES1() {
     cout << "ROM header format: iNES1.0" << endl;
     int mapperNumber = FLAGS6.N + (FLAGS7.N << 4);
