@@ -134,95 +134,86 @@ void BUS::dumpCPU() {
 
 	CPUstatus temp = nesCPU -> dumpCPU();
 
-	ostringstream tempString;
 	if (temp.instructionClocks == 0) {
-		tempString << hex << setw(6) << left << temp.PC;
-		tempString << hex << setw(8) << left << temp.opcode;
+		cout << hex << setw(6) << left << temp.PC;
+		cout << hex << setw(8) << left << temp.opcode;
 		switch(temp.addressMode) {
 			case acc:
-				tempString << hex << setw(18) << left << temp.opcode;
+				cout << hex << setw(18) << left << temp.opcode;
 				break;
 			case abl:
-				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.operandLow << temp.operandHigh;
+				cout << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.operandLow << temp.operandHigh;
 				break;
 			case abx:
-				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case aby:
-				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case imm:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << (uint8_t)temp.finalData;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << (uint8_t)temp.finalData;
 				break;
 			case imp:
-				tempString << hex << setw(7) << left << "";
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "";
+				cout << hex << setw(7) << left << "";
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "";
 				break;
 			case ind:
-				tempString << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandHigh << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case xin:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case yin:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case rel:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpg:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpx:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case zpy:
-				tempString << hex << setw(7) << left << temp.operandLow;
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "$" << temp.finalAddress;
+				cout << hex << setw(7) << left << temp.operandLow;
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "$" << temp.finalAddress;
 				break;
 			case axx:
-				tempString << hex << setw(7) << left << "";
-				tempString << hex << setw(4) << left << temp.opcode;
-				tempString << hex << setw(7) << left << "";
+				cout << hex << setw(7) << left << "";
+				cout << hex << setw(4) << left << temp.opcode;
+				cout << hex << setw(7) << left << "";
 				break;
 		};
 
-		tempString << hex << setw(4) << left << "A:" << temp.A;
-		tempString << hex << setw(4) << left << "X:" << temp.X;
-		tempString << hex << setw(4) << left << "Y:" << temp.Y;
-		tempString << hex << setw(5) << left << "SP:" << temp.SP;
-		tempString << hex << setw(5) << left << "SR:" << temp.SR.byte;
-		tempString << endl;
-		
-
-		// write to file
-		log << tempString.str();
-		// log.close();
-
-		// Output to terminal
-		cout << tempString.str();
+		cout << hex << setw(4) << left << "A:" << temp.A;
+		cout << hex << setw(4) << left << "X:" << temp.X;
+		cout << hex << setw(4) << left << "Y:" << temp.Y;
+		cout << hex << setw(5) << left << "SP:" << temp.SP;
+		cout << hex << setw(5) << left << "SR:" << temp.SR.byte;
+		cout << endl;
 	}
 
 	// cout << "CPU registers" << endl;

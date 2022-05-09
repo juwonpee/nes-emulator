@@ -108,15 +108,6 @@ PPU::~PPU() {
 
 }
 
-void PPU::clock() {
-	if (startUpClock < 29658) {
-		startUpClock++;
-	}
-	else {
-
-	}
-}
-
 uint8_t PPU::read(uint16_t address) {
 	uint8_t returnInt;
 	switch (address) {
@@ -185,16 +176,22 @@ void PPU::write(uint16_t address, uint8_t data) {
 }
 
 void PPU::clock() {
-	if (scanline == -1 && cycle == -1) {
-		PPUSTATUS.vertical_blank = 0;
+	if (startUpClock < 29658) {
+		startUpClock++;
 	}
-	if (scanline == 241 && cycle == 1) {
-		PPUSTATUS.vertical_blank = 1;
-		if (PPUCTRL.NMI_generate_time) {
-			bus->
+	else {
+		if (scanline == -1 && cycle == -1) {
+			PPUSTATUS.vertical_blank = 0;
+		}
+		if (scanline == 241 && cycle == 1) {
+			PPUSTATUS.vertical_blank = 1;
+			if (PPUCTRL.NMI_generate_time) {
+				//bus->
+			}
 		}
 	}
 }
+
 
 uint8_t PPU::PPUread(uint16_t address) {
 	if (address < 0x2000) {
