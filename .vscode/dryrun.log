@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/juwonpee/Desktop/Projects/nes-emulator'
+g++ src/BUS.o src/main.o src/APU/APU.o src/CPU/CPU.o src/Cartridge/Cart.o src/Cartridge/Mapper.o src/Cartridge/Mapper000.o src/Cartridge/Mapper002.o src/Cartridge/Mapper094.o src/Cartridge/Mapper180.o src/GUI/GUI.o src/Memory/MEM.o src/Memory/RAM.o src/PPU/PPU.o -o build/NES -lsfml-graphics -lsfml-window -lsfml-system -lpthread
+find . -name "*.o" | xargs -r rm 
+make: Leaving directory '/home/juwonpee/Desktop/Projects/nes-emulator'
+ 

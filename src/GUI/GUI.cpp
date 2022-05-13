@@ -18,10 +18,15 @@
 #include "GUI.h"
 
 using namespace std;
+using namespace GraphicsEngine;
+
+void graphicsThreadFunction(uint64_t length, uint64_t height, dataShare_t* share, string title) {
+	graphicsEngine window(length, height, share, title);
+}
 
 GUI::GUI() {
     dataShare.lock.unlock();
-    // thread* graphics = new thread(graphicsThread);
+    thread* graphics = new thread(graphicsThreadFunction, 1920, 1080, &dataShare, "place holder");
 }
 
 GUI::~GUI() {

@@ -1,0 +1,625 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 4.3
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+ 
+
+# Make data base, printed on Fri May 13 17:23:36 2022
+
+# Variables
+
+# environment
+GDK_BACKEND = x11
+# makefile (from 'Makefile', line 8)
+OUTPUT = build/NES
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+GNOME_SHELL_SESSION_MODE = ubuntu
+# environment
+SSH_AGENT_LAUNCHER = gnome-keyring
+# environment
+SNAP_INSTANCE_KEY = 
+# environment
+GJS_DEBUG_OUTPUT = stderr
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-0d571ce5-fa0c-42a4-8b04-df92928263b7.sock
+# makefile (from 'Makefile', line 7)
+SRC_DIR = src/
+# environment
+LC_NAME = ko_KR.UTF-8
+# environment
+LC_NUMERIC = ko_KR.UTF-8
+# environment
+VSCODE_CWD = /home/juwonpee
+# environment
+WINDOWPATH = 2
+# environment
+LC_ADDRESS = ko_KR.UTF-8
+# default
+MAKE_COMMAND := make
+# environment
+QT_ACCESSIBILITY = 1
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+SNAP_INSTANCE_NAME = code
+# environment
+GDK_PIXBUF_MODULEDIR = /snap/code/96/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /home/juwonpee/Desktop/Projects/nes-emulator
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+XDG_DATA_DIRS = /usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = /home/juwonpee/.config/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+# environment
+LANG = C
+# environment
+XAUTHORITY = /run/user/1000/gdm/Xauthority
+# default
+.LOADED := 
+# default
+.INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# makefile
+CURDIR := /home/juwonpee/Desktop/Projects/nes-emulator
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+LESSOPEN = | /usr/bin/lesspipe %s
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MFLAGS = -pqrR
+# environment
+SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# default
+.SHELLFLAGS := -c
+# environment
+XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XDG_SESSION_DESKTOP = ubuntu
+# makefile (from 'Makefile', line 5)
+LIBARIES = -lsfml-graphics -lsfml-window -lsfml-system -lpthread
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# environment
+SNAP_REEXEC = 
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 2313
+# environment
+XDG_SESSION_TYPE = x11
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SESSION_MANAGER = local/juwonpee-B450M-GAMING:@/tmp/.ICE-unix/1243,unix/juwonpee-B450M-GAMING:/tmp/.ICE-unix/1243
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# environment
+GNOME_DESKTOP_SESSION_ID = this-is-deprecated
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
+# environment
+PLATFORMIO_CALLER = vscode
+# environment
+XMODIFIERS = @im=ibus
+# environment
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
+# environment
+SHLVL = 0
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+SNAP_COOKIE = NdBUEu04vBLO0Db0TqZuOuh9KyNXiDd4zrKJuUgM1mhjiFddO7zD
+# environment
+PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+# makefile (from 'Makefile', line 2)
+CC_INCLUDE = $(patsubst %, -I%, $(shell find src -type d))
+# default
+MAKEFILES := 
+# environment
+LC_MONETARY = ko_KR.UTF-8
+# automatic
+^F = $(notdir $^)
+# environment
+SNAP_USER_COMMON = /home/juwonpee/snap/code/common
+# environment
+LC_TIME = ko_KR.UTF-8
+# environment
+SNAP = /snap/code/96
+# environment
+INVOCATION_ID = 90f03b6e6b1b43a1b45985d3af1006f0
+# environment
+SNAP_REVISION = 96
+# environment
+SNAP_REAL_HOME = /home/juwonpee
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = juwonpee
+# environment
+LC_TELEPHONE = ko_KR.UTF-8
+# environment
+LESSCLOSE = /usr/bin/lesspipe %s %s
+# automatic
+?F = $(notdir $?)
+# environment
+NO_PROXY = 127.0.0.1
+# environment
+XDG_CURRENT_DESKTOP = Unity
+# environment
+LS_COLORS = 
+# automatic
++F = $(notdir $+)
+# environment
+DESKTOP_SESSION = ubuntu
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+# makefile (from 'Makefile', line 10)
+OBJECTS = $(SOURCE:.cpp=.o)
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = juwonpee
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+PLATFORMIO_PATH = /home/juwonpee/.platformio/penv/bin:/home/juwonpee/.platformio/penv:/home/juwonpee/.platformio/python3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+# environment
+SNAP_ARCH = amd64
+# makefile
+.DEFAULT_GOAL := all
+# environment
+SYSTEMD_EXEC_PID = 1287
+# makefile (from 'Makefile', line 9)
+SOURCE = $(wildcard $(SRC_DIR)*.cpp) $(wildcard $(SRC_DIR)*/*.cpp)
+# environment
+DISPLAY = :0
+# environment
+USER = juwonpee
+# environment
+GTK_MODULES = gail:atk-bridge
+# default
+MAKE_VERSION := 4.3
+# environment
+DISABLE_WAYLAND = 1
+# environment
+SNAP_DATA = /var/snap/code/96
+# environment
+SNAP_CONTEXT = NdBUEu04vBLO0Db0TqZuOuh9KyNXiDd4zrKJuUgM1mhjiFddO7zD
+# environment
+MANAGERPID = 973
+# environment
+LC_MEASUREMENT = ko_KR.UTF-8
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 6028
+# environment
+_ = /snap/code/96/usr/share/code/code
+# environment
+LC_PAPER = ko_KR.UTF-8
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
+# environment
+GDK_PIXBUF_MODULE_FILE = /home/juwonpee/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+JOURNAL_STREAM = 8:38051
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+PLATFORMIO_IDE = 2.4.3
+# environment
+HOME = /home/juwonpee
+# environment
+QT_IM_MODULE = ibus
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-83187e53-1.67.1-main.sock
+# environment
+SNAP_NAME = code
+# environment
+GSETTINGS_SCHEMA_DIR = /snap/code/96/usr/share/glib-2.0/schemas
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# environment
+SNAP_VERSION = da15b6fd
+# default
+SUFFIXES := 
+# environment
+VSCODE_CLI = 1
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+SNAP_COMMON = /var/snap/code/common
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
+# makefile (from 'Makefile', line 1)
+CC = g++
+# environment
+SNAP_USER_DATA = /home/juwonpee/snap/code/96
+# environment
+XDG_MENU_PREFIX = gnome-
+# environment
+GDMSESSION = ubuntu
+# environment
+LC_IDENTIFICATION = ko_KR.UTF-8
+# makefile (from 'Makefile', line 3)
+CC_FLAGS = -ggdb -pipe -O0
+# environment
+SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+# variable set hash-table stats:
+# Load=142/1024=14%, Rehash=0, Collisions=6/186=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# src/Cartridge (device 66307, inode 8525796): 20 files, no impossibilities.
+# src/APU (device 66307, inode 8525788): 5 files, no impossibilities.
+# src/Memory (device 66307, inode 8525814): 8 files, no impossibilities.
+# src (device 66307, inode 8525787): 14 files, no impossibilities.
+# src/Include (device 66307, inode 8525812): 3 files, no impossibilities.
+# src/PPU (device 66307, inode 8525819): 5 files, no impossibilities.
+# . (device 66307, inode 8523143): 14 files, no impossibilities.
+# src/GUI (device 66307, inode 8525809): 5 files, no impossibilities.
+ 
+# src/CPU (device 66307, inode 8525793): 5 files, no impossibilities.
+
+# 79 files, no impossibilities in 9 directories.
+
+# Implicit Rules
+
+%.o: %.cpp
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# 1 implicit rules, 0 (0.0%) terminal.
+# Files
+
+# Not a target:
+src/Memory/RAM.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/Cartridge/Mapper002.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/CPU/CPU.o: src/CPU/CPU.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/CPU/CPU'
+#  Last modified 2022-05-13 17:22:30.888479224
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+src/Cartridge/Mapper000.o: src/Cartridge/Mapper000.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Mapper000'
+#  Last modified 2022-05-13 17:22:29.836445358
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/GUI/GUI.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 17:22:27.628374305
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 17:23:32.894489298
+#  File has been updated.
+#  Successfully updated.
+
+src/Cartridge/Mapper002.o: src/Cartridge/Mapper002.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Mapper002'
+#  Last modified 2022-05-13 17:22:29.796444071
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+src/Memory/MEM.o: src/Memory/MEM.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Memory/MEM'
+#  Last modified 2022-05-13 17:22:30.384462999
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+src/GUI/GUI.o: src/GUI/GUI.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/GUI/GUI'
+#  Last modified 2022-05-13 17:22:30.904479739
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/main.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/Memory/RAM.o: src/Memory/RAM.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Memory/RAM'
+#  Last modified 2022-05-13 17:22:30.420464158
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+src/Cartridge/Mapper094.o: src/Cartridge/Mapper094.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Mapper094'
+#  Last modified 2022-05-13 17:22:29.676440209
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/Cartridge/Mapper.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/Cartridge/Mapper180.o: src/Cartridge/Mapper180.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Mapper180'
+#  Last modified 2022-05-13 17:22:29.884446903
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+clear:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 22):
+	find . -name "*.o" | xargs -r rm 
+
+src/main.o: src/main.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/main'
+#  Last modified 2022-05-13 17:22:30.488466347
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/Cartridge/Mapper000.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/Cartridge/Mapper180.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+src/Cartridge/Cart.o: src/Cartridge/Cart.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Cart'
+#  Last modified 2022-05-13 17:22:30.124454629
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+ 
+all: src/BUS.o src/main.o src/APU/APU.o src/CPU/CPU.o src/Cartridge/Cart.o src/Cartridge/Mapper.o src/Cartridge/Mapper000.o src/Cartridge/Mapper002.o src/Cartridge/Mapper094.o src/Cartridge/Mapper180.o src/GUI/GUI.o src/Memory/MEM.o src/Memory/RAM.o src/PPU/PPU.o
+#  Command line target.
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := all
+# automatic
+# * := 
+# automatic
+# < := src/BUS.o
+# automatic
+# + := src/BUS.o src/main.o src/APU/APU.o src/CPU/CPU.o src/Cartridge/Cart.o src/Cartridge/Mapper.o src/Cartridge/Mapper000.o src/Cartridge/Mapper002.o src/Cartridge/Mapper094.o src/Cartridge/Mapper180.o src/GUI/GUI.o src/Memory/MEM.o src/Memory/RAM.o src/PPU/PPU.o
+# automatic
+# % := 
+# automatic
+# ^ := src/BUS.o src/main.o src/APU/APU.o src/CPU/CPU.o src/Cartridge/Cart.o src/Cartridge/Mapper.o src/Cartridge/Mapper000.o src/Cartridge/Mapper002.o src/Cartridge/Mapper094.o src/Cartridge/Mapper180.o src/GUI/GUI.o src/Memory/MEM.o src/Memory/RAM.o src/PPU/PPU.o
+# automatic
+# ? := src/BUS.o src/main.o src/APU/APU.o src/CPU/CPU.o src/Cartridge/Cart.o src/Cartridge/Mapper.o src/Cartridge/Mapper000.o src/Cartridge/Mapper002.o src/Cartridge/Mapper094.o src/Cartridge/Mapper180.o src/GUI/GUI.o src/Memory/MEM.o src/Memory/RAM.o src/PPU/PPU.o
+# automatic
+# | := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=3/18=17%
+#  recipe to execute (from 'Makefile', line 15):
+	$(CC) $(OBJECTS) -o $(OUTPUT) $(LIBARIES)
+	find . -name "*.o" | xargs -r rm 
+
+src/BUS.o: src/BUS.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/BUS'
+#  Last modified 2022-05-13 17:22:30.016451152
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/Memory/MEM.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/PPU/PPU.o: src/PPU/PPU.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/PPU/PPU'
+#  Last modified 2022-05-13 17:22:30.744474589
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/APU/APU.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/BUS.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 17:00:06.884368513
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/CPU/CPU.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/Cartridge/Mapper094.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/Cartridge/Mapper.o: src/Cartridge/Mapper.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/Cartridge/Mapper'
+#  Last modified 2022-05-13 17:22:29.632438793
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/Cartridge/Cart.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 16:59:39.503323784
+#  File has been updated.
+#  Successfully updated.
+
+src/APU/APU.o: src/APU/APU.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/APU/APU'
+#  Last modified 2022-05-13 17:22:28.836413173
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) $(CC_INCLUDE) -c $< -o $@ $(CC_FLAGS)
+
+# Not a target:
+src/PPU/PPU.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-13 17:00:06.884368513
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=33/1024=3%, Rehash=0, Collisions=3/101=3%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 120 / storage = 1451 B / avg = 12 B
+# current buf: size = 8162 B / used = 1451 B / count = 120 / avg = 12 B
+
+# strcache performance: lookups = 159 / hit rate = 24%
+# hash-table stats:
+# Load=120/8192=1%, Rehash=0, Collisions=2/159=1%
+# Finished Make data base on Fri May 13 17:23:36 2022
+
+ 
